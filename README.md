@@ -6,8 +6,6 @@ Using Sensor Modules powered by Arduino Nano, this system will sample parameters
 - Data available in Restful API.
 - Programmable notifications.
 
-## Description:
-
 ## Hardware:
 - SH-HC-10: BLE module for wireless communication between Sensor Modules and Control Unit (Raspberry Pi).
 - Arduino Nano: powers the Sensor Modules.
