@@ -1,0 +1,14 @@
+>> hcitool lescan // Scans for BLE devices
+
+>> gatttool -I
+[LE]> connect <MAC_ADDRESS>
+Attempting to connect to C8:FD:19:3E:BE:7F
+Connection successful
+Notification handle = 0x0025 value: 41 54
+Notification handle = 0x0025 value: 41 54
+Notification handle = 0x0025 value: 41 54 5f 41 56 44 41 3d 63 65 73 61 72
+Notification handle = 0x0025 value: 41 54 2b 41 56 44 41 3d 31 30 30 2c 33 34 2c 35 36
+
+// At this point, every time the BLE receives an AT command,
+// a notification is received. This can probably be changed from the Pi side and
+// disable notifications for handles except for 0x0025. 
