@@ -14,7 +14,7 @@ void setup() {
 void loop() {
 
   if (Serial.available()) {
-    int inByte = bleModule.read();
+    int inByte = Serial.read();
     bleModule.write(inByte);
   }
 
