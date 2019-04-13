@@ -11,6 +11,8 @@ while True:
     # print
     selection = int(input("Enter your choice: "))
 
+    # Input validation pending!
+
     if selection == 1:
         print "Scanning BLE devices...\n"
         scan_output = comms.BLE_scan()
@@ -24,7 +26,7 @@ while True:
         # print "Enter device number you want to connect to:"
         connect_selection = int(input("Enter device number you want to connect to:"))
         device = comms.BLE_connect(devicesList[connect_selection].get_MAC_ADDRESS())
-        device.subscribe (devicesList[selection].handle0x25_UUID, callback=comms.handle_data)
+        device.subscribe (devicesList[connect_selection].handle0x25_UUID, callback=comms.handle_data)
         print "Listening to device data ..."
     if selection == 3:
         print "PENDING!"

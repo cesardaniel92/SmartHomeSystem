@@ -16,7 +16,7 @@ void loop() {
 
   // Generating fake sensor data:
   fakeValue = random(fakeValueMax);
-  Serial.write("Transmitting Sensor data...");
+  Serial.write("Transmitting Sensor data...\n");
   bleModule.write(fakeValue);
 
   delay(5000);    // 5 seconds delay
