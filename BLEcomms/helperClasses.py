@@ -90,8 +90,20 @@ class BLE_comms:
         # print("Received data: %s" % hexlify(value))
 
     def print_buffer(self):
+        print("Buffer:")
         for item in self.buffer:
-            print("%s" % hexlify(item))
+            print "%s" % hexlify(item)
+
+        print "Last Sensor Values:"
+        allHex = self.buffer[len(self.buffer)-1]
+        hum = allHex[0] # + allHex[1]
+        temp = allHex[1] # + allHex[3]
+        gas = allHex[2] # + allHex[5]
+
+        print "Humidity: %s", hum
+        print "Temp: %s", temp
+        print "Gas: %s", gas
+
 
 # Helper Functions:
 
