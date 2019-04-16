@@ -9,6 +9,13 @@
 
 from PyQt4 import QtCore, QtGui
 
+
+import sys
+sys.path.append('../BLEcomms')
+from helperClasses import *
+
+comms = BLE_comms()
+
 try:
     _fromUtf8 = QtCore.QString.fromUtf8
 except AttributeError:
@@ -74,6 +81,11 @@ class Ui_SmartHomeSystemv1(object):
         self.retranslateUi(SmartHomeSystemv1)
         QtCore.QMetaObject.connectSlotsByName(SmartHomeSystemv1)
 
+
+        # ACTIONS configuration:
+        self.scanButton.clicked.connect(self.scanAction)
+        self.connectButton.clicked.connect(self.connectToSensorModule)
+
     def retranslateUi(self, SmartHomeSystemv1):
         SmartHomeSystemv1.setWindowTitle(_translate("SmartHomeSystemv1", "SmartHomeSystem v1.0", None))
         self.pressureLabel.setText(_translate("SmartHomeSystemv1", "Pressure", None))
@@ -83,6 +95,20 @@ class Ui_SmartHomeSystemv1(object):
         self.humidityLabel.setText(_translate("SmartHomeSystemv1", "Humidity", None))
         self.connectButton.setText(_translate("SmartHomeSystemv1", "Connect", None))
 
+        # ACTION functions:
+    def scanAction(self):
+        scan_output = comms.BLE_scan()
+        devicesList = comms.get_found_devices(scan_output)
+        for device in devicesList:
+            self.devicesBox.addItem(device.get_MAC_ADDRESS())
+
+
+    def connectToSensorModule(self):
+        deviceMAC = self.devicesBox.getValue()
+        deviceIndex = self.deviceBox.
+        device = comms.BLE_connect(deviceMAC)
+        device.subscribe (devicesList[connect_selection].handle0x25_UUID, callback=comms.handle_data)
+        print "Listening to device data ..."
 
 if __name__ == "__main__":
     import sys
@@ -92,4 +118,3 @@ if __name__ == "__main__":
     ui.setupUi(SmartHomeSystemv1)
     SmartHomeSystemv1.show()
     sys.exit(app.exec_())
-

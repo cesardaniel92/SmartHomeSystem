@@ -13,3 +13,8 @@ Using Sensor Modules powered by Arduino Nano, this system will sample parameters
 
 ## Directories:
 **BLEcomms:** Contains the code for the initial communication. It has a basic Arduino code to send AT commands to the HC-10 module and the commands to connect and read to it from the Terminal in the Raspberry Pi.
+
+
+#Potential Dependencies:
+sudo apt install libcanberra-gtk-module libcanberra-gtk3-module
+sudo apt-get install --reinstall overlay-scrollbar-gtk2
