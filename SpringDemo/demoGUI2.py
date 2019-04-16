@@ -9,7 +9,7 @@
 from PyQt4 import QtCore, QtGui
 
 import sys
-sys.path.append('../BLEcomms')
+sys.path.append('/home/pi/Desktop/SmartHomeSystem/BLEcomms')
 from helperClasses import *
 
 
