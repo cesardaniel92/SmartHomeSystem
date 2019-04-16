@@ -1,0 +1,19 @@
+Links to usful resources for REST API:
+
+- What is REST API (youtube)
+https://www.youtube.com/watch?v=7YcW25PHnAA&t=125s
+https://www.youtube.com/watch?v=tI8ijLpZaHk&t=48s
+https://www.youtube.com/watch?v=s7wmiS2mSXY
+
+-Website containing full tutuorials on REST API
+https://www.restapitutorial.com/
+
+
+-Playlist for learning Paython and REST APIs (youtube)
+https://www.youtube.com/watch?v=eVFngZkjTlU&list=PLsYGHuNuBZcYtP1KTqyDtahvFBc0SLKQi
+
+
+-Building a REST API (Home Automation example) (youtube)
+https://www.youtube.com/watch?v=M0izp2GJSe0
+https://www.youtube.com/watch?v=4T5Gnrmzjak
+
