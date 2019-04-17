@@ -16,9 +16,9 @@
   <widget class="QWidget" name="centralwidget">
    <layout class="QGridLayout" name="gridLayout">
     <item row="4" column="1">
-     <widget class="QLabel" name="pressureLabel">
+     <widget class="QLabel" name="airQualityLabel">
       <property name="text">
-       <string>Pressure</string>
+       <string>Air Quality</string>
       </property>
      </widget>
     </item>
@@ -43,19 +43,19 @@
      <widget class="QLCDNumber" name="tempLCD"/>
     </item>
     <item row="4" column="3">
-     <widget class="QLCDNumber" name="pressureLCD"/>
+     <widget class="QLCDNumber" name="airqualityLCD"/>
     </item>
     <item row="2" column="1">
      <widget class="QLabel" name="tempLabel">
       <property name="text">
-       <string>Temperature</string>
+       <string>Temperature (C)</string>
       </property>
      </widget>
     </item>
     <item row="3" column="1">
      <widget class="QLabel" name="humidityLabel">
       <property name="text">
-       <string>Humidity</string>
+       <string>Humidity (%)</string>
       </property>
      </widget>
     </item>
@@ -84,7 +84,7 @@
      <x>0</x>
      <y>0</y>
      <width>400</width>
-     <height>21</height>
+     <height>25</height>
     </rect>
    </property>
   </widget>
