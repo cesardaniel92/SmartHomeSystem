@@ -101,7 +101,7 @@ class Ui_SmartHomeSystemv1(object):
         self.tempLabel.setText(_translate("SmartHomeSystemv1", "Temperature", None))
         self.humidityLabel.setText(_translate("SmartHomeSystemv1", "Humidity", None))
         self.connectButton.setText(_translate("SmartHomeSystemv1", "Connect", None))
-        self.infoText.setText(_translate("SmartHomeSystemv1", "TextLabel", None))
+        self.infoText.setText(_translate("SmartHomeSystemv1", "", None))
         self.refreshButton.setText(_translate("SmartHomeSystemv1", "Refresh", None))
 
     # ACTION functions:
