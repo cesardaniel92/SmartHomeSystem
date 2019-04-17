@@ -74,7 +74,7 @@ class Ui_SmartHomeSystemv1(object):
         self.refreshButton = QtGui.QPushButton(self.centralwidget)
         self.refreshButton.setObjectName(_fromUtf8("refreshButton"))
         self.gridLayout.addWidget(self.refreshButton, 5, 1, 1, 1)
-        
+
         SmartHomeSystemv1.setCentralWidget(self.centralwidget)
         self.menubar = QtGui.QMenuBar(SmartHomeSystemv1)
         self.menubar.setGeometry(QtCore.QRect(0, 0, 400, 21))
@@ -102,7 +102,7 @@ class Ui_SmartHomeSystemv1(object):
         self.humidityLabel.setText(_translate("SmartHomeSystemv1", "Humidity", None))
         self.connectButton.setText(_translate("SmartHomeSystemv1", "Connect", None))
         self.infoText.setText(_translate("SmartHomeSystemv1", "TextLabel", None))
-
+        self.refreshButton.setText(_translate("SmartHomeSystemv1", "Refresh", None))
 
     # ACTION functions:
     def scanAction(self):
