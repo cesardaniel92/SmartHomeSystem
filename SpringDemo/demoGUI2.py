@@ -32,7 +32,7 @@ except AttributeError:
 class Ui_SmartHomeSystemv1(object):
     def setupUi(self, SmartHomeSystemv1):
         SmartHomeSystemv1.setObjectName(_fromUtf8("SmartHomeSystemv1"))
-        SmartHomeSystemv1.resize(460, 300)
+        SmartHomeSystemv1.resize(470, 300)
         self.centralwidget = QtGui.QWidget(SmartHomeSystemv1)
         self.centralwidget.setObjectName(_fromUtf8("centralwidget"))
         self.gridLayout = QtGui.QGridLayout(self.centralwidget)
