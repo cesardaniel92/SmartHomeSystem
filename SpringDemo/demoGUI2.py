@@ -70,6 +70,11 @@ class Ui_SmartHomeSystemv1(object):
         self.infoText = QtGui.QLabel(self.centralwidget)
         self.infoText.setObjectName(_fromUtf8("infoText"))
         self.gridLayout.addWidget(self.infoText, 0, 2, 1, 2)
+
+        self.refreshButton = QtGui.QPushButton(self.centralwidget)
+        self.refreshButton.setObjectName(_fromUtf8("refreshButton"))
+        self.gridLayout.addWidget(self.refreshButton, 5, 1, 1, 1)
+        
         SmartHomeSystemv1.setCentralWidget(self.centralwidget)
         self.menubar = QtGui.QMenuBar(SmartHomeSystemv1)
         self.menubar.setGeometry(QtCore.QRect(0, 0, 400, 21))
