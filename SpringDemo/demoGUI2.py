@@ -11,12 +11,9 @@ from PyQt4 import QtCore, QtGui
 import sys
 sys.path.append('/home/pi/Desktop/SmartHomeSystem/BLEcomms')
 from helperClasses import *
-
-
 comms = BLE_comms()
 devicesList = []
 connectedDeviceIndex = 0
-
 
 try:
     _fromUtf8 = QtCore.QString.fromUtf8
@@ -36,14 +33,13 @@ class Ui_SmartHomeSystemv1(object):
     def setupUi(self, SmartHomeSystemv1):
         SmartHomeSystemv1.setObjectName(_fromUtf8("SmartHomeSystemv1"))
         SmartHomeSystemv1.resize(400, 300)
-        SmartHomeSystemv1.setMaximumSize(QtCore.QSize(400, 300))
         self.centralwidget = QtGui.QWidget(SmartHomeSystemv1)
         self.centralwidget.setObjectName(_fromUtf8("centralwidget"))
         self.gridLayout = QtGui.QGridLayout(self.centralwidget)
         self.gridLayout.setObjectName(_fromUtf8("gridLayout"))
-        self.airQualityLabel = QtGui.QLabel(self.centralwidget)
-        self.airQualityLabel.setObjectName(_fromUtf8("airQualityLabel"))
-        self.gridLayout.addWidget(self.airQualityLabel, 4, 1, 1, 1)
+        self.pressureLabel = QtGui.QLabel(self.centralwidget)
+        self.pressureLabel.setObjectName(_fromUtf8("pressureLabel"))
+        self.gridLayout.addWidget(self.pressureLabel, 4, 1, 1, 1)
         self.scanButton = QtGui.QPushButton(self.centralwidget)
         self.scanButton.setObjectName(_fromUtf8("scanButton"))
         self.gridLayout.addWidget(self.scanButton, 0, 0, 1, 1)
@@ -56,9 +52,9 @@ class Ui_SmartHomeSystemv1(object):
         self.tempLCD = QtGui.QLCDNumber(self.centralwidget)
         self.tempLCD.setObjectName(_fromUtf8("tempLCD"))
         self.gridLayout.addWidget(self.tempLCD, 2, 3, 1, 1)
-        self.airQualityLCD = QtGui.QLCDNumber(self.centralwidget)
-        self.airQualityLCD.setObjectName(_fromUtf8("airQualityLCD"))
-        self.gridLayout.addWidget(self.airQualityLCD, 4, 3, 1, 1)
+        self.pressureLCD = QtGui.QLCDNumber(self.centralwidget)
+        self.pressureLCD.setObjectName(_fromUtf8("pressureLCD"))
+        self.gridLayout.addWidget(self.pressureLCD, 4, 3, 1, 1)
         self.tempLabel = QtGui.QLabel(self.centralwidget)
         self.tempLabel.setObjectName(_fromUtf8("tempLabel"))
         self.gridLayout.addWidget(self.tempLabel, 2, 1, 1, 1)
@@ -73,14 +69,10 @@ class Ui_SmartHomeSystemv1(object):
         self.gridLayout.addWidget(self.connectButton, 1, 1, 1, 1)
         self.infoText = QtGui.QLabel(self.centralwidget)
         self.infoText.setObjectName(_fromUtf8("infoText"))
-        self.infoText.clear()
         self.gridLayout.addWidget(self.infoText, 0, 2, 1, 2)
-        self.refreshButton = QtGui.QPushButton(self.centralwidget)
-        self.refreshButton.setObjectName(_fromUtf8("refreshButton"))
-        self.gridLayout.addWidget(self.refreshButton, 5, 1, 1, 1)
         SmartHomeSystemv1.setCentralWidget(self.centralwidget)
         self.menubar = QtGui.QMenuBar(SmartHomeSystemv1)
-        self.menubar.setGeometry(QtCore.QRect(0, 0, 400, 25))
+        self.menubar.setGeometry(QtCore.QRect(0, 0, 400, 21))
         self.menubar.setObjectName(_fromUtf8("menubar"))
         SmartHomeSystemv1.setMenuBar(self.menubar)
         self.statusbar = QtGui.QStatusBar(SmartHomeSystemv1)
@@ -90,7 +82,6 @@ class Ui_SmartHomeSystemv1(object):
         self.retranslateUi(SmartHomeSystemv1)
         QtCore.QMetaObject.connectSlotsByName(SmartHomeSystemv1)
 
-
         # ACTIONS configuration:
         self.scanButton.clicked.connect(self.scanAction)
         self.connectButton.clicked.connect(self.connectToSensorModule)
@@ -99,14 +90,13 @@ class Ui_SmartHomeSystemv1(object):
 
     def retranslateUi(self, SmartHomeSystemv1):
         SmartHomeSystemv1.setWindowTitle(_translate("SmartHomeSystemv1", "SmartHomeSystem v1.0", None))
-        self.airQualityLabel.setText(_translate("SmartHomeSystemv1", "airQuality", None))
+        self.pressureLabel.setText(_translate("SmartHomeSystemv1", "Pressure", None))
         self.scanButton.setText(_translate("SmartHomeSystemv1", "Scan BLE devices", None))
         self.disconnectButton.setText(_translate("SmartHomeSystemv1", "Disconnect", None))
         self.tempLabel.setText(_translate("SmartHomeSystemv1", "Temperature", None))
         self.humidityLabel.setText(_translate("SmartHomeSystemv1", "Humidity", None))
         self.connectButton.setText(_translate("SmartHomeSystemv1", "Connect", None))
-        self.infoText.setText(_translate("SmartHomeSystemv1", "", None))
-        self.refreshButton.setText(_translate("SmartHomeSystemv1", "Refresh", None))
+        self.infoText.setText(_translate("SmartHomeSystemv1", "TextLabel", None))
 
 
     # ACTION functions:
@@ -156,12 +146,9 @@ class Ui_SmartHomeSystemv1(object):
 
 if __name__ == "__main__":
     import sys
-
-
-
     app = QtGui.QApplication(sys.argv)
     SmartHomeSystemv1 = QtGui.QMainWindow()
     ui = Ui_SmartHomeSystemv1()
     ui.setupUi(SmartHomeSystemv1)
-    SmartHomeSystemv1.showFullScreen()
+    SmartHomeSystemv1.show()
     sys.exit(app.exec_())
