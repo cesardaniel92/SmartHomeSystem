@@ -155,5 +155,5 @@ if __name__ == "__main__":
     SmartHomeSystemv1 = QtGui.QMainWindow()
     ui = Ui_SmartHomeSystemv1()
     ui.setupUi(SmartHomeSystemv1)
-    SmartHomeSystemv1.show()
+    SmartHomeSystemv1.showFullScreen()
     sys.exit(app.exec_())
