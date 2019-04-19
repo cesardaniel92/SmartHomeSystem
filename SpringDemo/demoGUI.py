@@ -149,9 +149,8 @@ class Ui_SmartHomeSystemv1(object):
 
         self.humidityLCD.display(hum)
         self.tempLCD.display(temp)
-        self.airQualityLCD.display(gas)
-
-        comms.print_buffer()
+        self.airqualityLCD.display(gas)
+        
 
     def exitGUI(self):
         sys.exit()
