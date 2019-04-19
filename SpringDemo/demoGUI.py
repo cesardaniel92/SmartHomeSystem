@@ -109,6 +109,7 @@ class Ui_SmartHomeSystemv1(object):
     # ACTION functions:
     def scanAction(self):
         global devicesList
+        global comms
         self.infoText.setText("Scanning for Sensor Modules...")
 
         scan_output = comms.BLE_scan()
