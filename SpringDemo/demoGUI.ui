@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>655</width>
-    <height>547</height>
+    <width>435</width>
+    <height>302</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -15,31 +15,17 @@
   </property>
   <widget class="QWidget" name="centralwidget">
    <layout class="QGridLayout" name="gridLayout">
-    <item row="4" column="1">
-     <widget class="QLabel" name="airQualityLabel">
+    <item row="3" column="1">
+     <widget class="QLabel" name="humidityLabel">
       <property name="font">
        <font>
-        <pointsize>18</pointsize>
+        <pointsize>16</pointsize>
         <weight>75</weight>
         <bold>true</bold>
        </font>
       </property>
       <property name="text">
-       <string>Air Quality</string>
-      </property>
-     </widget>
-    </item>
-    <item row="0" column="0">
-     <widget class="QPushButton" name="scanButton">
-      <property name="font">
-       <font>
-        <pointsize>18</pointsize>
-        <weight>75</weight>
-        <bold>true</bold>
-       </font>
-      </property>
-      <property name="text">
-       <string>Scan BLE devices</string>
+       <string>Humidity (%)</string>
       </property>
      </widget>
     </item>
@@ -47,7 +33,7 @@
      <widget class="QPushButton" name="disconnectButton">
       <property name="font">
        <font>
-        <pointsize>18</pointsize>
+        <pointsize>16</pointsize>
         <weight>75</weight>
         <bold>true</bold>
        </font>
@@ -61,29 +47,18 @@
      <widget class="QLCDNumber" name="humidityLCD">
       <property name="font">
        <font>
-        <pointsize>18</pointsize>
+        <pointsize>16</pointsize>
         <weight>75</weight>
         <bold>true</bold>
        </font>
       </property>
      </widget>
     </item>
-    <item row="2" column="3">
-     <widget class="QLCDNumber" name="tempLCD">
+    <item row="1" column="0">
+     <widget class="QComboBox" name="devicesBox">
       <property name="font">
        <font>
-        <pointsize>18</pointsize>
-        <weight>75</weight>
-        <bold>true</bold>
-       </font>
-      </property>
-     </widget>
-    </item>
-    <item row="4" column="3">
-     <widget class="QLCDNumber" name="airqualityLCD">
-      <property name="font">
-       <font>
-        <pointsize>18</pointsize>
+        <pointsize>16</pointsize>
         <weight>75</weight>
         <bold>true</bold>
        </font>
@@ -92,9 +67,15 @@
     </item>
     <item row="2" column="1">
      <widget class="QLabel" name="tempLabel">
+      <property name="baseSize">
+       <size>
+        <width>400</width>
+        <height>300</height>
+       </size>
+      </property>
       <property name="font">
        <font>
-        <pointsize>26</pointsize>
+        <pointsize>16</pointsize>
         <weight>75</weight>
         <bold>true</bold>
        </font>
@@ -104,25 +85,25 @@
       </property>
      </widget>
     </item>
-    <item row="3" column="1">
-     <widget class="QLabel" name="humidityLabel">
+    <item row="4" column="1">
+     <widget class="QLabel" name="airQualityLabel">
       <property name="font">
        <font>
-        <pointsize>18</pointsize>
+        <pointsize>16</pointsize>
         <weight>75</weight>
         <bold>true</bold>
        </font>
       </property>
       <property name="text">
-       <string>Humidity (%)</string>
+       <string>Air Quality</string>
       </property>
      </widget>
     </item>
-    <item row="1" column="0">
-     <widget class="QComboBox" name="devicesBox">
+    <item row="4" column="3">
+     <widget class="QLCDNumber" name="airqualityLCD">
       <property name="font">
        <font>
-        <pointsize>18</pointsize>
+        <pointsize>16</pointsize>
         <weight>75</weight>
         <bold>true</bold>
        </font>
@@ -133,7 +114,7 @@
      <widget class="QPushButton" name="connectButton">
       <property name="font">
        <font>
-        <pointsize>18</pointsize>
+        <pointsize>16</pointsize>
         <weight>75</weight>
         <bold>true</bold>
        </font>
@@ -143,25 +124,11 @@
       </property>
      </widget>
     </item>
-    <item row="0" column="2" colspan="2">
-     <widget class="QLabel" name="infoText">
-      <property name="font">
-       <font>
-        <pointsize>18</pointsize>
-        <weight>75</weight>
-        <bold>true</bold>
-       </font>
-      </property>
-      <property name="text">
-       <string/>
-      </property>
-     </widget>
-    </item>
     <item row="5" column="1">
      <widget class="QPushButton" name="refreshButton">
       <property name="font">
        <font>
-        <pointsize>18</pointsize>
+        <pointsize>16</pointsize>
         <weight>75</weight>
         <bold>true</bold>
        </font>
@@ -175,13 +142,52 @@
      <widget class="QPushButton" name="quitButton">
       <property name="font">
        <font>
-        <pointsize>18</pointsize>
+        <pointsize>16</pointsize>
         <weight>75</weight>
         <bold>true</bold>
        </font>
       </property>
       <property name="text">
        <string>Quit</string>
+      </property>
+     </widget>
+    </item>
+    <item row="0" column="0">
+     <widget class="QPushButton" name="scanButton">
+      <property name="font">
+       <font>
+        <pointsize>16</pointsize>
+        <weight>75</weight>
+        <bold>true</bold>
+       </font>
+      </property>
+      <property name="text">
+       <string>Scan modules</string>
+      </property>
+     </widget>
+    </item>
+    <item row="2" column="3">
+     <widget class="QLCDNumber" name="tempLCD">
+      <property name="font">
+       <font>
+        <pointsize>16</pointsize>
+        <weight>75</weight>
+        <bold>true</bold>
+       </font>
+      </property>
+     </widget>
+    </item>
+    <item row="0" column="1" colspan="3">
+     <widget class="QLabel" name="infoText">
+      <property name="font">
+       <font>
+        <pointsize>16</pointsize>
+        <weight>75</weight>
+        <bold>true</bold>
+       </font>
+      </property>
+      <property name="text">
+       <string/>
       </property>
      </widget>
     </item>
@@ -192,7 +198,7 @@
     <rect>
      <x>0</x>
      <y>0</y>
-     <width>655</width>
+     <width>435</width>
      <height>25</height>
     </rect>
    </property>
