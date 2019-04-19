@@ -9,6 +9,14 @@ pip install pygatt
 pip install pexpect
 ```
 
+### Code Update:
+In order to run "updateCode.sh", first we need to run:
+
+```shell
+sudo apt-get install xterm
+```
+
+
 
 ### Remote Control Setup:
 First, vnc server must be installed **on the Pi** by running:
