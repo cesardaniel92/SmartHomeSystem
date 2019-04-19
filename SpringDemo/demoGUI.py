@@ -152,7 +152,7 @@ class Ui_SmartHomeSystemv1(object):
         self.airQualityLCD.display(gas)
 
     def exitGUI(self):
-        self.close()
+        sys.exit()
 
 
 if __name__ == "__main__":
