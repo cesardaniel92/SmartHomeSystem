@@ -111,7 +111,6 @@ class Ui_SmartHomeSystemv1(object):
         global devicesList
         global comms
         self.infoText.setText("Scanning ...")
-
         scan_output = comms.BLE_scan()
         devicesList = comms.get_found_devices(scan_output)
         for device in devicesList:
@@ -120,16 +119,14 @@ class Ui_SmartHomeSystemv1(object):
         self.infoText.setText("Scanning complete.")
 
     def connectToSensorModule(self):
+        self.infoText.setText("Connecting ...")
         global devicesList
         global deviceIndex
-
         deviceMAC = self.devicesBox.currentText()
-        self.infoText.setText("Connecting ...")
         # Getting device index:
         for index in range(len(devicesList)):
             if devicesList[index].get_MAC_ADDRESS() == deviceMAC:
                 connectedDeviceIndex = index
-
         device = comms.BLE_connect(deviceMAC)
         print "DeviceIndex: ", connectedDeviceIndex
         print "devicesList size: ", len(devicesList)
@@ -150,7 +147,7 @@ class Ui_SmartHomeSystemv1(object):
         self.humidityLCD.display(hum)
         self.tempLCD.display(temp)
         self.airqualityLCD.display(gas)
-        
+
 
     def exitGUI(self):
         sys.exit()
@@ -162,5 +159,5 @@ if __name__ == "__main__":
     SmartHomeSystemv1 = QtGui.QMainWindow()
     ui = Ui_SmartHomeSystemv1()
     ui.setupUi(SmartHomeSystemv1)
-    SmartHomeSystemv1.show()
+    SmartHomeSystemv1.showFullScreen()
     sys.exit(app.exec_())
