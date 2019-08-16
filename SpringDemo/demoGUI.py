@@ -214,6 +214,11 @@ class Ui_SmartHomeSystemv1(object):
         self.tempLCD.display(temp)
         self.airqualityLCD.display(gas)
 
+        # WRITING DATA TO API \\\\\\\\\\\\\\\\\\\\ TEMPORAL!
+        uri = 'https://l4gv9uqwpd.execute-api.us-west-1.amazonaws.com/prod/sensordata'
+        requests.put(uri + "?humidity=" + str(hum) + "&temperature=" + str(temp))
+
+
 
     def exitGUI(self):
         sys.exit()
@@ -221,6 +226,9 @@ class Ui_SmartHomeSystemv1(object):
 
 if __name__ == "__main__":
     import sys
+    import requests
+
+
     app = QtGui.QApplication(sys.argv)
     SmartHomeSystemv1 = QtGui.QMainWindow()
     ui = Ui_SmartHomeSystemv1()
