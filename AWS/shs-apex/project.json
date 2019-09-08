@@ -1,0 +1,9 @@
+{
+  "name": "shs",
+  "description": "AWS Lambda code for Capstone Project Smart Home System.",
+  "memory": 128,
+  "timeout": 5,
+  "role": "arn:aws:iam::136159130349:role/shs_lambda_function",
+  "runtime": "nodejs10.x",
+  "environment": {}
+}
