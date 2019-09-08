@@ -9,11 +9,17 @@
 from PyQt4 import QtCore, QtGui
 
 import sys
-sys.path.append('/home/pi/Desktop/SmartHomeSystem/BLEcomms')
+import requests
+import threading
+import time
+sys.path.append('../BLEcomms') # TEMPORAL!!!!
 from helperClasses import *
 comms = BLE_comms()
+
+apiUpdate = True
 devicesList = []
 connectedDeviceIndex = 0
+
 
 try:
     _fromUtf8 = QtCore.QString.fromUtf8
@@ -160,6 +166,7 @@ class Ui_SmartHomeSystemv1(object):
         self.connectButton.clicked.connect(self.connectToSensorModule)
         self.refreshButton.clicked.connect(self.refreshData)
         self.quitButton.clicked.connect(self.exitGUI)
+        # self.disconnectButton.clicked.connect(self.disconnectAction)
 
     def retranslateUi(self, SmartHomeSystemv1):
         SmartHomeSystemv1.setWindowTitle(_translate("SmartHomeSystemv1", "SmartHomeSystem v1.0", None))
@@ -185,6 +192,8 @@ class Ui_SmartHomeSystemv1(object):
         self.infoText.setText("Scanning complete.")
 
     def connectToSensorModule(self):
+        global testThread
+
         self.infoText.setText("Connecting ...")
         global devicesList
         global deviceIndex
@@ -200,10 +209,19 @@ class Ui_SmartHomeSystemv1(object):
         device.subscribe (devicesList[connectedDeviceIndex].handle0x25_UUID, callback=comms.handle_data)
         self.infoText.setText("Connection complete.")
 
+        # TEMPORAL FOR THREADING TESTING!:
+        # global testThread
+        # print "starting test thread ...."
+        # testThread.start()
+
     def refreshData(self):
+
         global devicesList
         global connectedDeviceIndex
         global comms
+
+        global apiUpdate
+        global testThread
 
         allHex = comms.lastValue
         hum = allHex[0]
@@ -214,20 +232,45 @@ class Ui_SmartHomeSystemv1(object):
         self.tempLCD.display(temp)
         self.airqualityLCD.display(gas)
 
+        apiUpdate = not apiUpdate   # Flipping apiUPdate flag
+        newText = "apiUPdate = " + str(apiUpdate)
+        self.infoText.setText(newText)
+
         # WRITING DATA TO API \\\\\\\\\\\\\\\\\\\\ TEMPORAL!
         uri = 'https://l4gv9uqwpd.execute-api.us-west-1.amazonaws.com/prod/sensordata'
-        requests.put(uri + "?humidity=" + str(hum) + "&temperature=" + str(temp))
+        command = uri + "?sensorID=1&humidity=" + str(hum) + "&temperature=" + str(temp) + "&airQuality=" + str(gas)
+        requests.put(command)
 
-
+    # def disconnectAction(self):
+        # TEMPORAL FOR THREADING TESTING!:
+        # global testThread
+        # print "starting test thread ...."
+        # testThread.start()
 
     def exitGUI(self):
         sys.exit()
 
 
-if __name__ == "__main__":
-    import sys
-    import requests
+# def thread_function(name):
+#     global apiUpdate
+#     global comms
+#
+#     while apiUpdate:
+#         print "apiUpdate " + str(apiUpdate)
+#         allHex = comms.lastValue
+#         hum = allHex[0]
+#         temp = allHex[1]
+#         gas = allHex[2]
+#         # WRITING DATA TO API \\\\\\\\\\\\\\\\\\\\ TEMPORAL!
+#         uri = 'https://l4gv9uqwpd.execute-api.us-west-1.amazonaws.com/prod/sensordata'
+#         command = uri + "?sensorID=1&humidity=" + str(hum) + "&temperature=" + str(temp) + "&airQuality=" + str(gas)
+#         requests.put(command)
+#         print "writing sensor data to API with " + command
+#         time.sleep(5)
+# testThread = threading.Thread(target=thread_function, args=(1,))
+# testThread.daemon = True
 
+if __name__ == "__main__":
 
     app = QtGui.QApplication(sys.argv)
     SmartHomeSystemv1 = QtGui.QMainWindow()
