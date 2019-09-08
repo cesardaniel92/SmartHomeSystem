@@ -1,4 +1,7 @@
-
+/*
+ * Working Arduino code for Uno board. 
+ * */
+ 
 #include <SoftwareSerial.h>
 
 #include "DHT.h";
