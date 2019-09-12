@@ -9,7 +9,7 @@ class BLE_device:
     name = ""
     MAC_address = ""
     handle0x25_UUID = "0000ffe1-0000-1000-8000-00805f9b34fb"
-
+    id = 0
 
     def __init__(self, new_name, new_MAC):
         self.name = new_name
@@ -36,7 +36,8 @@ class BLE_device:
 
 class BLE_comms:
     buffer = []
-    lastValue = 0
+    connectedModules = []
+    lastValue = []
 
     # This function scans for 5 seconds and displays the list of devices found if no error occurs.
     def BLE_scan(self):
@@ -85,6 +86,7 @@ class BLE_comms:
         handle -- integer, characteristic read handle the data was received on
         value -- bytearray, the data returned in the notification
         """
+        print "HANDLE: " + str(handle)
         self.buffer.append(value)
         self.lastValue = value
         # print("Received data: %s" % hexlify(value))
