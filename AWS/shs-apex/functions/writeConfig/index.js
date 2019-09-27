@@ -1,3 +1,23 @@
+/*
+    This Lambda function is triggered by a Write Action at the SHS-API/configuration endpoint.
+    The input has the following format, where the numeric values are the thresholds:
+    {
+        "user": "Default",
+        "email": "ctamayoc@asu.edu",
+        "tempT": 100,
+        "humT": 100,
+        "airQT": 200
+    }
+
+    Steps executed by the function:
+    1. Extract configuration settings from function input.
+    2. Get current Topic subscriptions.
+    3. Delete subscriptions different than input email.
+    4. Subscribe input email if not found.
+    5. Write configuration to DynamoDB table.
+
+*/
+
 console.log('starting writeConfiguration function')
 
 const AWS = require('aws-sdk');

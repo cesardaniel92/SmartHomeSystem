@@ -1,8 +1,28 @@
-console.log('starting writeData function')
+/*
+    This Lambda function is triggered by a Write Action at the SHS-API/sensordata endpoint.
+    The input has the following format:
+    {
+        "sensorID": 5,
+        "humidity": 5,
+        "airQuality": 200,
+        "temperature": 5
+    }
 
+    Steps executed by the function:
+    1. Read current configuration from DynamoDB table.
+    2. Extract sensor data from function input.
+    3. If Notifications are enabled according to the extracted current configuration:
+        3.1) Check threshold values.
+        3.2) Build alert message body.
+        3.3) Publish alert to SNS Topic.
+    4. Write sensor data to DynamoDB table.
+
+*/
+
+
+console.log('starting writeData function');
 const AWS = require('aws-sdk');
 const docClient = new AWS.DynamoDB.DocumentClient({region: 'us-west-1'});
-
 
 exports.handle = function(e, ctx, cb) {
 
