@@ -1,4 +1,4 @@
-![Smart Home Systems Architecture](https://github.com/cesardaniel92/SmartHomeSystem/architecture.png)
+![Smart Home Systems Architecture](/architecture.png)
 
 # Smart Home System using Raspberry Pi
 Using Sensor Modules powered by Arduino Nano, this system will sample parameters like temperature, humidity and air quality and transfer it wireless to a Control Unit powered by Raspberry Pi 3 B+ with a 3.5 inch touch-screen running a Graphic User Interface. This data will be available through a Restful API supported by AWS.
