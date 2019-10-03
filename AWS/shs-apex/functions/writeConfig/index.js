@@ -37,7 +37,8 @@ exports.handle = function(e, ctx, cb) {
             Email: e.email,
             TemperatureThreshold: e.tempT,
             HumidityThreshold: e.humT,
-            AirQualityThreshold: e.airQT
+            AirQualityThreshold: e.airQT,
+            NotificationsEnabled: e.notEnabled
         },
 
         TableName: 'SHS-Configuration'
