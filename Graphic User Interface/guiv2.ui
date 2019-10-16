@@ -35,7 +35,7 @@
      </font>
     </property>
     <property name="currentIndex">
-     <number>0</number>
+     <number>1</number>
     </property>
     <widget class="QWidget" name="InternetSetup">
      <attribute name="title">
@@ -51,6 +51,20 @@
        </rect>
       </property>
       <layout class="QGridLayout" name="gridLayout">
+       <item row="1" column="1">
+        <widget class="QPushButton" name="ScanWiFi">
+         <property name="text">
+          <string>Scan WiFi Networks</string>
+         </property>
+        </widget>
+       </item>
+       <item row="5" column="1">
+        <widget class="QPushButton" name="ConnectToWiFi">
+         <property name="text">
+          <string>Connect</string>
+         </property>
+        </widget>
+       </item>
        <item row="2" column="1">
         <spacer name="verticalSpacer">
          <property name="orientation">
@@ -66,20 +80,6 @@
        </item>
        <item row="3" column="1">
         <widget class="QListWidget" name="WiFiList"/>
-       </item>
-       <item row="1" column="1">
-        <widget class="QPushButton" name="ScanWiFi">
-         <property name="text">
-          <string>Scan WiFi Networks</string>
-         </property>
-        </widget>
-       </item>
-       <item row="5" column="1">
-        <widget class="QPushButton" name="ConnectToWiFi">
-         <property name="text">
-          <string>Connect</string>
-         </property>
-        </widget>
        </item>
        <item row="4" column="1">
         <spacer name="verticalSpacer_2">
@@ -128,9 +128,6 @@
          </property>
         </widget>
        </item>
-       <item row="2" column="3">
-        <widget class="QListView" name="SensorModulesSelectedList"/>
-       </item>
        <item row="2" column="2">
         <widget class="QPushButton" name="SelectSensorModule">
          <property name="text">
@@ -157,6 +154,9 @@
           </size>
          </property>
         </spacer>
+       </item>
+       <item row="2" column="3">
+        <widget class="QListWidget" name="ModulesSelectedList"/>
        </item>
       </layout>
      </widget>

@@ -42,10 +42,9 @@ class NotificationDelegate(DefaultDelegate):
             print 'Thread/SensorID: ' + str(self.connection_number) + ' \tTemperature: ' + str(temp) + ' \tHumidity: ' + str(hum) + ' \tAirQuality: ' + str(airQ)
 
             # writing to API:
-            print 'Thread/SensorID: ' + str(self.connection_number) + ' writing data into API ...'
             sensor_id = self.connection_number
-            self.api.write_data(temp, hum, airQ, sensor_id)
-
+            # self.api.write_data(temp, hum, airQ, sensor_id)
+            # print 'Thread/SensorID: ' + str(self.connection_number) + ' writing data into API ...'
 
 class ConnectionHandlerThread (threading.Thread):
     '''
@@ -108,6 +107,11 @@ class BLE_handler:
         self.api = API_handler()
         self.apiWrite = False
 
+    def scan(self):
+        self.bleDevices = self.scanner.scan(2)
+        # for d in self.bleDevices:
+        #     print(d.addr)
+
     def addModuleMAC(self, new_MAC):
         self.modules_MACs.append(new_MAC)
 
@@ -125,4 +129,4 @@ class BLE_handler:
                     self.connection_threads.append(t)
                     # time.sleep(3)
 
-        print 'All devices are connected.'
+        # return True

@@ -107,9 +107,17 @@ class BLE_handler:
         self.scanner = Scanner(0)
         self.api = API_handler()
         self.apiWrite = False
+        self.bleDevices = []
 
     def addModuleMAC(self, new_MAC):
         self.modules_MACs.append(new_MAC)
+
+    def scan(self):
+        self.bleDevices = self.scanner.scan(2)
+        for d in self.bleDevices:
+            print(d.addr)
+
+
 
     def connect(self):
         while len(self.connection_threads) < len(self.modules_MACs):

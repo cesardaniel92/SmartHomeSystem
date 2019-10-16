@@ -16,35 +16,6 @@ import time
 
 ble = BLE_handler()
 
-
-class ConnectionHandlerThread (threading.Thread):
-    '''
-        This class represents the threads that handle the connection to BLE devices.
-        WHEN THIS CLASS IS NOT IN MAIN, IT FAILS! -> TEMPORAL
-    '''
-    # Constructor
-    def __init__(self, connection_index, connected_modules, api):
-        threading.Thread.__init__(self)
-        self.connection_index = connection_index
-        self.connected_modules = connected_modules
-        self.api = api
-
-    # Start method:
-    def run(self):
-        # initializing connection object and setting notification delegate:
-        connection = self.connected_modules[self.connection_index]
-        connection.setDelegate(NotificationDelegate(self.connection_index, self.api))
-
-        # waiting for sensors to stabilize
-        time.sleep(5)
-
-        # infinite loop to throw error if no notifications are received:
-        while True:
-            if not connection.waitForNotifications(10):
-                print "ERROR: no message received from Sensor ID " + str(self.connection_index)
-
-
-
 try:
     _fromUtf8 = QtCore.QString.fromUtf8
 except AttributeError:
@@ -115,7 +86,7 @@ class Ui_SmartHomeSystem(object):
         self.ScanBLE = QtGui.QPushButton(self.gridLayoutWidget_3)
         self.ScanBLE.setObjectName(_fromUtf8("ScanBLE"))
         self.gridLayout_3.addWidget(self.ScanBLE, 1, 1, 1, 1)
-        self.SensorModulesSelectedList = QtGui.QListView(self.gridLayoutWidget_3)
+        self.SensorModulesSelectedList = QtGui.QListWidget(self.gridLayoutWidget_3)
         self.SensorModulesSelectedList.setObjectName(_fromUtf8("SensorModulesSelectedList"))
         self.gridLayout_3.addWidget(self.SensorModulesSelectedList, 2, 3, 1, 1)
         self.SelectSensorModule = QtGui.QPushButton(self.gridLayoutWidget_3)
@@ -203,7 +174,9 @@ class Ui_SmartHomeSystem(object):
         QtCore.QMetaObject.connectSlotsByName(SmartHomeSystem)
 
         # ACTIONS:
-
+        self.ScanBLE.clicked.connect(self.scanBLEAction)
+        self.SelectSensorModule.clicked.connect(self.selectSensorMac)
+        self.ConnectToBLEDevices.clicked.connect(self.connectToBLE)
 
     def retranslateUi(self, SmartHomeSystem):
         SmartHomeSystem.setWindowTitle(_translate("SmartHomeSystem", "SmartHomeSystem v1.0", None))
@@ -228,13 +201,38 @@ class Ui_SmartHomeSystem(object):
         self.InternetStatusLabel.setText(_translate("SmartHomeSystem", "Internet Connection Status:", None))
         self.sensorModulesConnectedLabel.setText(_translate("SmartHomeSystem", "Sensor Modules Connected: ", None))
 
-    # 
-    # def connectToSensors(self):
-    #     # 1. Add module MAC addresses:
+    #
+    def scanBLEAction(self):
+        global ble
+        ble.scan()
 
+        self.BLEList.clear()
 
-    # def scanBLE(self):
+        for mac in ble.bleDevices:
+            self.BLEList.addItem(mac.addr)
 
+    def selectSensorMac(self):
+        self.SensorModulesSelectedList.addItem(self.BLEList.currentItem().text())
+        # print(self.BLEList.currentItem().text())
+
+    def connectToBLE(self):
+        global ble
+
+        items = []
+        for index in xrange(self.SensorModulesSelectedList.count()):
+             items.append(self.SensorModulesSelectedList.item(index).text())
+
+        for mac in items:
+            print("Adding " + mac)
+            ble.addModuleMAC(mac)
+
+        ble.connect()
+        # if ble.connect():
+        newText = "Sensor Modules Connected: " + str(len(ble.connected_modules))
+        self.sensorModulesConnectedLabel.setText(newText)
+
+    def exitGUI(self):
+        sys.exit()
 
 
 if __name__ == "__main__":

@@ -251,24 +251,6 @@ class Ui_SmartHomeSystemv1(object):
         sys.exit()
 
 
-# def thread_function(name):
-#     global apiUpdate
-#     global comms
-#
-#     while apiUpdate:
-#         print "apiUpdate " + str(apiUpdate)
-#         allHex = comms.lastValue
-#         hum = allHex[0]
-#         temp = allHex[1]
-#         gas = allHex[2]
-#         # WRITING DATA TO API \\\\\\\\\\\\\\\\\\\\ TEMPORAL!
-#         uri = 'https://l4gv9uqwpd.execute-api.us-west-1.amazonaws.com/prod/sensordata'
-#         command = uri + "?sensorID=1&humidity=" + str(hum) + "&temperature=" + str(temp) + "&airQuality=" + str(gas)
-#         requests.put(command)
-#         print "writing sensor data to API with " + command
-#         time.sleep(5)
-# testThread = threading.Thread(target=thread_function, args=(1,))
-# testThread.daemon = True
 
 if __name__ == "__main__":
 
