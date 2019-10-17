@@ -17,7 +17,7 @@ def Search():
     cells = wifi.Cell.all('wlan0') #will list all the networks are nearby
 
     for cell in cells:
-        wifilist.append(cell)
+        wifilist.append(cell.ssid)
 
     return wifilist
 
