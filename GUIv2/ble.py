@@ -119,8 +119,8 @@ class BLE_handler:
 
     def scan(self):
         self.bleDevices = self.scanner.scan(2)
-        for d in self.bleDevices:
-            print(d.addr)
+        # for d in self.bleDevices:
+        #     print(d.addr)
 
     def connect(self):
         while len(self.connection_threads) < len(self.modules_MACs):

@@ -8,6 +8,7 @@
 
 from PyQt4 import QtCore, QtGui
 from ble import *
+from my_wifi import *
 
 import sys
 import requests
@@ -183,6 +184,7 @@ class Ui_SmartHomeSystem(object):
         self.ScanBLE.clicked.connect(self.scanBLEAction)
         self.SelectSensorModule.clicked.connect(self.selectSensorMac)
         self.ConnectToBLEDevices.clicked.connect(self.connectToBLE)
+        self.ScanWiFi.clicked.connect(self.scanWifi)
 
     def retranslateUi(self, SmartHomeSystem):
         SmartHomeSystem.setWindowTitle(_translate("SmartHomeSystem", "SmartHomeSystem v1.0", None))
@@ -238,6 +240,12 @@ class Ui_SmartHomeSystem(object):
         # if ble.connect():
         newText = "Sensor Modules Connected: " + str(len(ble.connected_modules))
         self.sensorModulesConnectedLabel.setText(newText)
+
+
+    def scanWifi(self):
+        list = Search()
+        for item in list:
+            self.WiFiList.addItem(item)
 
     def exitGUI(self):
         sys.exit()
