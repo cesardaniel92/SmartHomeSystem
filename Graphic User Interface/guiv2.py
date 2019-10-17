@@ -7,14 +7,6 @@
 # WARNING! All changes made in this file will be lost!
 
 from PyQt4 import QtCore, QtGui
-from ble import *
-
-import sys
-import requests
-import threading
-import time
-
-ble = BLE_handler()
 
 try:
     _fromUtf8 = QtCore.QString.fromUtf8
@@ -179,11 +171,6 @@ class Ui_SmartHomeSystem(object):
         self.tabWidget.setCurrentIndex(0)
         QtCore.QMetaObject.connectSlotsByName(SmartHomeSystem)
 
-        # ACTIONS CONFIGURATION:
-        self.ScanBLE.clicked.connect(self.scanBLEAction)
-        self.SelectSensorModule.clicked.connect(self.selectSensorMac)
-        self.ConnectToBLEDevices.clicked.connect(self.connectToBLE)
-
     def retranslateUi(self, SmartHomeSystem):
         SmartHomeSystem.setWindowTitle(_translate("SmartHomeSystem", "SmartHomeSystem v1.0", None))
         self.ScanWiFi.setText(_translate("SmartHomeSystem", "Scan WiFi Networks", None))
@@ -208,47 +195,3 @@ class Ui_SmartHomeSystem(object):
         self.InternetStatusLabel.setText(_translate("SmartHomeSystem", "Internet Connection Status:", None))
         self.sensorModulesConnectedLabel.setText(_translate("SmartHomeSystem", "Sensor Modules Connected: ", None))
 
-
-    ############### ACTION FUNCTIONS ##########################################
-    def scanBLEAction(self):
-        global ble
-        ble.scan()
-
-        self.BLEList.clear()
-
-        for mac in ble.bleDevices:
-            self.BLEList.addItem(mac.addr)
-
-    def selectSensorMac(self):
-        self.ModulesSelectedList.addItem(self.BLEList.currentItem().text())
-        # print(self.BLEList.currentItem().text())
-
-    def connectToBLE(self):
-        global ble
-
-        items = []
-        for index in xrange(self.ModulesSelectedList.count()):
-             items.append(self.ModulesSelectedList.item(index).text())
-
-        for mac in items:
-            print("Adding " + mac)
-            ble.addModuleMAC(mac)
-
-        ble.connect()
-        # if ble.connect():
-        newText = "Sensor Modules Connected: " + str(len(ble.connected_modules))
-        self.sensorModulesConnectedLabel.setText(newText)
-
-    def exitGUI(self):
-        sys.exit()
-
-
-if __name__ == "__main__":
-
-
-    app = QtGui.QApplication(sys.argv)
-    SmartHomeSystem = QtGui.QMainWindow()
-    ui = Ui_SmartHomeSystem()
-    ui.setupUi(SmartHomeSystem)
-    SmartHomeSystem.show()
-    sys.exit(app.exec_())
