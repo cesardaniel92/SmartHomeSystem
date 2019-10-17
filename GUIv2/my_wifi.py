@@ -17,9 +17,17 @@ def Search():
     cells = wifi.Cell.all('wlan0') #will list all the networks are nearby
 
     for cell in cells:
-        wifilist.append(cell.ssid)
+        wifilist.append(cell)
 
-    return wifilist
+    list_comma = str(wifilist).split(',')
+    
+    result = []
+    for line in list_comma:
+        split1 = line.split('ssid=')[1]
+        result.append(split1.split(')')[0])
+        
+    return result   
+    
 
 class Finder:
     def __init__(self, *args, **kwargs):
@@ -37,7 +45,7 @@ class Finder:
                 return None
         else:
             ssid_list = [item.lstrip('SSID:').strip('"\n') for item in result]
-            print("Successfully get ssids {}".format(str(ssid_list)))
+            print("Successfully finds entered SSID")
 
        # for name in ssid_list:
             try:
@@ -50,9 +58,8 @@ class Finder:
 
     def connection(self):
         try:
-            os.system("nmcli d wifi connect {} password {} iface {}".format(self.server_name,
-       self.password,
-       self.interface_name))
+            print('executing nmcli command...')
+            os.system("nmcli d wifi connect '{}' password '{}' iface {}".format(self.server_name, self.password, self.interface_name))
         except self.password as error:
             print("wrong password!",error)
             #raise
@@ -72,21 +79,23 @@ def check_connection():
         return False
 
 #***********************connect function that take the ssid and the password and check weather it is online/offline
-def connect():
+def connect(ssid, input_password):
     try:
         urllib.request.urlopen('http://216.58.192.142', timeout=1)#checking the conectivity by trying to open a google url
-        print('You are Online')
+        # print('You are Online')
+        raise Exception('device is already online')
     except urllib.request.URLError as err:
-        print('You are offline ')
+        # print('You are offline ')
 
-        server_name = input("ssid name: ") #taking the ssid as user input to pass it to the connect function
-        password = input("password: ")  #taking the password as user input to pass it to the connect function
+        # server_name = input("ssid name: ") #taking the ssid as user input to pass it to the connect function
+        # password = input("password: ")  #taking the password as user input to pass it to the connect function
         interface_name = "wlan0" #
-        F = Finder(server_name=server_name,
-               password=password,
+        F = Finder(server_name=ssid,
+               password=input_password,
                interface=interface_name)
         F.run()
-        print(internet_on())
+        # print(internet_on())
+        return True
 
 
 if __name__ == '__main__':
