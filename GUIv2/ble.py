@@ -42,9 +42,10 @@ class NotificationDelegate(DefaultDelegate):
             print 'Thread/SensorID: ' + str(self.connection_number) + ' \tTemperature: ' + str(temp) + ' \tHumidity: ' + str(hum) + ' \tAirQuality: ' + str(airQ)
 
             # writing to API:
+            print 'Thread/SensorID: ' + str(self.connection_number) + ' writing data into API ...'
             sensor_id = self.connection_number
-            # self.api.write_data(temp, hum, airQ, sensor_id)
-            # print 'Thread/SensorID: ' + str(self.connection_number) + ' writing data into API ...'
+            self.api.write_data(temp, hum, airQ, sensor_id)
+
 
 class ConnectionHandlerThread (threading.Thread):
     '''
@@ -57,6 +58,7 @@ class ConnectionHandlerThread (threading.Thread):
         self.connection_index = connection_index
         self.connected_modules = connected_modules
         self.api = api
+        self._stop = threading.Event()
 
     # Start method:
     def run(self):
@@ -71,6 +73,10 @@ class ConnectionHandlerThread (threading.Thread):
         while True:
             if not connection.waitForNotifications(10):
                 print "ERROR: no message received from Sensor ID " + str(self.connection_index)
+
+    def stop(self):
+        self._stop.set()
+
 
 
 class API_handler:
@@ -106,14 +112,15 @@ class BLE_handler:
         self.scanner = Scanner(0)
         self.api = API_handler()
         self.apiWrite = False
-
-    def scan(self):
-        self.bleDevices = self.scanner.scan(2)
-        # for d in self.bleDevices:
-        #     print(d.addr)
+        self.bleDevices = []
 
     def addModuleMAC(self, new_MAC):
         self.modules_MACs.append(new_MAC)
+
+    def scan(self):
+        self.bleDevices = self.scanner.scan(2)
+        for d in self.bleDevices:
+            print(d.addr)
 
     def connect(self):
         while len(self.connection_threads) < len(self.modules_MACs):
@@ -127,6 +134,11 @@ class BLE_handler:
                     t = ConnectionHandlerThread(len(self.connected_modules)-1, self.connected_modules, self.api)
                     t.start()
                     self.connection_threads.append(t)
-                    # time.sleep(3)
+                    time.sleep(3)   # This delay allows for API calls not to happen too close to eachother.
 
-        # return True
+        print 'All devices are connected.'
+
+    def disconnect(self):
+        print 'Disconnecting ...'
+        for connection in self.connection_threads:
+            connection.stop()

@@ -58,6 +58,7 @@ class ConnectionHandlerThread (threading.Thread):
         self.connection_index = connection_index
         self.connected_modules = connected_modules
         self.api = api
+        self._stop = threading.Event()
 
     # Start method:
     def run(self):
@@ -72,6 +73,10 @@ class ConnectionHandlerThread (threading.Thread):
         while True:
             if not connection.waitForNotifications(10):
                 print "ERROR: no message received from Sensor ID " + str(self.connection_index)
+
+    def stop(self):
+        self._stop.set()
+
 
 
 class API_handler:
@@ -117,8 +122,6 @@ class BLE_handler:
         for d in self.bleDevices:
             print(d.addr)
 
-
-
     def connect(self):
         while len(self.connection_threads) < len(self.modules_MACs):
             print 'Scanning ...'
@@ -134,3 +137,8 @@ class BLE_handler:
                     # time.sleep(3)
 
         print 'All devices are connected.'
+
+    def disconnect(self):
+        print 'Disconnecting ...'
+        for connection in self.connection_threads:
+            connection.stop()
