@@ -8,7 +8,10 @@ import subprocess
 
 
 
-def Search(): #scan for availble networks around
+def Search():
+    '''
+    Search function all returns a list of available SSIDs in string format even if it's connected
+    '''
     wifilist = []
 
     cells = wifi.Cell.all('wlan0') #will list all the networks are nearby
@@ -16,7 +19,7 @@ def Search(): #scan for availble networks around
     for cell in cells:
         wifilist.append(cell)
 
-    print(wifilist, sep = "\n")
+    return wifilist
 
 class Finder:
     def __init__(self, *args, **kwargs):
@@ -56,12 +59,17 @@ class Finder:
 
             return True
 
-def internet_on():
+
+def check_connection():
+    '''
+    This function return True if there is internet Connection
+    and False otherwise.
+    '''
     try:
         urllib.request.urlopen('http://216.58.192.142', timeout=1)#checking the conectivity by trying to open a google url
-        print(' Connected to wifi ')
+        return True
     except urllib.request.URLError as err:
-        print("Couldn't connect to wifi, check your SSID/Password")
+        return False
 
 #***********************connect function that take the ssid and the password and check weather it is online/offline
 def connect():
