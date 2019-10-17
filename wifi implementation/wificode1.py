@@ -7,11 +7,11 @@ import subprocess
 
 
 
-  
+
 def Search(): #scan for availble networks around
     wifilist = []
 
-    cells = wifi.Cell.all('wlan0') #will list all the networks are nearby 
+    cells = wifi.Cell.all('wlan0') #will list all the networks are nearby
 
     for cell in cells:
         wifilist.append(cell)
@@ -45,7 +45,7 @@ class Finder:    #select a network and connect to it with a password
                 if result:
                     print("Successfully connected to {}".format(name))
 
-    def connection(self, name): #connection function 
+    def connection(self, name): #connection function
         try:
             os.system("nmcli d wifi connect {} password {} iface {}".format(name,
        self.password,
@@ -64,7 +64,7 @@ def internet_on(): #checking the conectivity by trying to open a google url
         print (Search())
         server_name = input("ssid name: ") #taking the ssid as user input to pass it to the connect function
         password = input("password: ")  #taking the password as user input to pass it to the connect function
-        interface_name = "wlan0" # 
+        interface_name = "wlan0" #
         F = Finder(server_name=server_name,
                password=password,
                interface=interface_name)
@@ -73,8 +73,5 @@ def internet_on(): #checking the conectivity by trying to open a google url
 
 
 if __name__ == '__main__':
-    
+
     print (internet_on())
-
-
-
