@@ -28,7 +28,7 @@ class NotificationDelegate(DefaultDelegate):
 
         # validating data lenght:
         if len(val) != 6:
-            print 'ERROR: wrong length message received (size = ' + len(val) + ').'
+            print('ERROR: wrong length message received ')
         else:
             # parsing decoded sensor data:
             hum = val[:2]
@@ -39,10 +39,10 @@ class NotificationDelegate(DefaultDelegate):
             airQ = int(airQ, 16)
 
             # outputting data for troubleshooting purposes:
-            print 'Thread/SensorID: ' + str(self.connection_number) + ' \tTemperature: ' + str(temp) + ' \tHumidity: ' + str(hum) + ' \tAirQuality: ' + str(airQ)
+            # print'Thread/SensorID: ' + str(self.connection_number) + ' \tTemperature: ' + str(temp) + ' \tHumidity: ' + str(hum) + ' \tAirQuality: ' + str(airQ))
 
             # writing to API:
-            print 'Thread/SensorID: ' + str(self.connection_number) + ' writing data into API ...'
+            print ("Thread/SensorID:",  str(self.connection_number), " writing data into API ...")
             sensor_id = self.connection_number
             self.api.write_data(temp, hum, airQ, sensor_id)
 
@@ -58,7 +58,7 @@ class ConnectionHandlerThread (threading.Thread):
         self.connection_index = connection_index
         self.connected_modules = connected_modules
         self.api = api
-        self._stop = threading.Event()
+        # self._stop = threading.Event()
 
     # Start method:
     def run(self):
@@ -72,11 +72,7 @@ class ConnectionHandlerThread (threading.Thread):
         # infinite loop to throw error if no notifications are received:
         while True:
             if not connection.waitForNotifications(10):
-                print "ERROR: no message received from Sensor ID " + str(self.connection_index)
-
-    def stop(self):
-        self._stop.set()
-
+                print ("ERROR: no message received from Sensor")
 
 
 class API_handler:
@@ -84,7 +80,6 @@ class API_handler:
     This class contains the functions that communicate to the RestAPI for both
     sensor data and configuration.
     '''
-
     api_endpoint = 'https://l4gv9uqwpd.execute-api.us-west-1.amazonaws.com/prod/'
     data_uri = api_endpoint + 'sensordata'
     config_uri = api_endpoint + 'configuration'
@@ -124,21 +119,18 @@ class BLE_handler:
 
     def connect(self):
         while len(self.connection_threads) < len(self.modules_MACs):
-            print 'Scanning ...'
+            print ('Scanning ...')
             devices = self.scanner.scan(2)
             for d in devices:
                 if d.addr in self.modules_MACs:
                     p = Peripheral(d)
                     self.connected_modules.append(p)
-                    print 'Module ' + d.addr + ' connected. Assigned ID = ' + str(len(self.connected_modules)-1)
+                    print ('Module ', d.addr , ' connected. Assigned ID = ', str(len(self.connected_modules)-1))
                     t = ConnectionHandlerThread(len(self.connected_modules)-1, self.connected_modules, self.api)
                     t.start()
                     self.connection_threads.append(t)
                     time.sleep(3)   # This delay allows for API calls not to happen too close to eachother.
 
-        print 'All devices are connected.'
+        print ('All devices are connected.')
 
-    def disconnect(self):
-        print 'Disconnecting ...'
-        for connection in self.connection_threads:
-            connection.stop()
+

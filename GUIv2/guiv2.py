@@ -229,7 +229,7 @@ class Ui_SmartHomeSystem(object):
         global ble
 
         items = []
-        for index in xrange(self.ModulesSelectedList.count()):
+        for index in range(self.ModulesSelectedList.count()):
              items.append(self.ModulesSelectedList.item(index).text())
 
         for mac in items:
