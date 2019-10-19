@@ -185,7 +185,9 @@ class Ui_SmartHomeSystem(object):
         self.SelectSensorModule.clicked.connect(self.selectSensorMac)
         self.ConnectToBLEDevices.clicked.connect(self.connectToBLE)
         self.ScanWiFi.clicked.connect(self.scanWifi)
-        self.ConnectToWifi.clicked.connect(self.connectToWifiAction)
+        self.ConnectToWiFi.clicked.connect(self.connectToWifiAction)
+        # Setting password mode in text field to use * and hide characters:
+        self.passwordField.setEchoMode(QtGui.QLineEdit.Password) 
 
     def retranslateUi(self, SmartHomeSystem):
         SmartHomeSystem.setWindowTitle(_translate("SmartHomeSystem", "SmartHomeSystem v1.0", None))
@@ -244,16 +246,31 @@ class Ui_SmartHomeSystem(object):
 
 
     def scanWifi(self):
-        list = Search()
+        list = scan_wifi()
         for item in list:
             self.WiFiList.addItem(item)
 
 
     def connectToWifiAction(self):
+        
         ssid = self.WiFiList.currentItem().text()
         password = self.passwordField.text()
-
-        connect_to_wifi(ssid, password)
+        
+        if check_connection():
+            newText = "Internet Connection Status: ONLINE"
+        else:
+            tempText = "Internet Connection Status: ... "
+            self.InternetStatusLabel.setText(tempText)
+                        
+            connect_to_wifi(ssid, password)
+            time.sleep(15) # Waiting for connection to estabilize
+            
+            if check_connection():
+                newText = "Internet Connection Status: ONLINE"
+            else:
+                newText = "Internet Connection Status: OFFLINE"
+        
+        self.InternetStatusLabel.setText(newText)
 
     def exitGUI(self):
         sys.exit()
