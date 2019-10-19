@@ -187,7 +187,7 @@ class Ui_SmartHomeSystem(object):
         self.ScanWiFi.clicked.connect(self.scanWifi)
         self.ConnectToWiFi.clicked.connect(self.connectToWifiAction)
         # Setting password mode in text field to use * and hide characters:
-        self.passwordField.setEchoMode(QtGui.QLineEdit.Password) 
+        self.passwordField.setEchoMode(QtGui.QLineEdit.Password)
 
     def retranslateUi(self, SmartHomeSystem):
         SmartHomeSystem.setWindowTitle(_translate("SmartHomeSystem", "SmartHomeSystem v1.0", None))
@@ -252,24 +252,24 @@ class Ui_SmartHomeSystem(object):
 
 
     def connectToWifiAction(self):
-        
+
         ssid = self.WiFiList.currentItem().text()
         password = self.passwordField.text()
-        
+
         if check_connection():
             newText = "Internet Connection Status: ONLINE"
         else:
             tempText = "Internet Connection Status: ... "
             self.InternetStatusLabel.setText(tempText)
-                        
+
             connect_to_wifi(ssid, password)
             time.sleep(15) # Waiting for connection to estabilize
-            
+
             if check_connection():
                 newText = "Internet Connection Status: ONLINE"
             else:
                 newText = "Internet Connection Status: OFFLINE"
-        
+
         self.InternetStatusLabel.setText(newText)
 
     def exitGUI(self):
