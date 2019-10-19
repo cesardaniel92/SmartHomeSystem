@@ -185,7 +185,7 @@ class Ui_SmartHomeSystem(object):
         self.SelectSensorModule.clicked.connect(self.selectSensorMac)
         self.ConnectToBLEDevices.clicked.connect(self.connectToBLE)
         self.ScanWiFi.clicked.connect(self.scanWifi)
-        self.ConnectToWifi.clicked.connect(self.connectToWifi)
+        self.ConnectToWifi.clicked.connect(self.connectToWifiAction)
 
     def retranslateUi(self, SmartHomeSystem):
         SmartHomeSystem.setWindowTitle(_translate("SmartHomeSystem", "SmartHomeSystem v1.0", None))
@@ -247,8 +247,13 @@ class Ui_SmartHomeSystem(object):
         list = Search()
         for item in list:
             self.WiFiList.addItem(item)
-           
-   
+
+
+    def connectToWifiAction(self):
+        ssid = self.WiFiList.currentItem().text()
+        password = self.passwordField.text()
+
+        connect_to_wifi(ssid, password)
 
     def exitGUI(self):
         sys.exit()

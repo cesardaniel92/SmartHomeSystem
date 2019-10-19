@@ -19,14 +19,14 @@ def Search():
         wifilist.append(cell)
 
     list_comma = str(wifilist).split(',')
-    
+
     result = []
     for line in list_comma:
         split1 = line.split('ssid=')[1]
         result.append(split1.split(')')[0])
-        
-    return result   
-    
+
+    return result
+
 
 class Finder:
     def __init__(self, *args, **kwargs):
@@ -51,34 +51,34 @@ class Finder:
                 return self.connection()
             except:
                 raise Exception('connection failed.')
-            
 
-    def connection(self):        
+
+    def connection(self):
         # adding network:
         add_network_cmd = 'sudo wpa_cli -i wlan0 add_network'
         print("executing ", add_network_cmd)
-        network_id = os.popen(add_network_cmd).read().split("\n")[0] 
-        
+        network_id = os.popen(add_network_cmd).read().split("\n")[0]
+
         # setting ssid:
         set_ssid_cmd = "sudo wpa_cli -i wlan0 set_network " + str(network_id) + " ssid '\"" + self.ssid + "\"'"
         print("executing ", set_ssid_cmd)
         os.system(set_ssid_cmd)
-        
+
         # setting password:
         set_pwd_cmd = "sudo wpa_cli -i wlan0 set_network " + str(network_id) + " psk '\"" + self.password + "\"'"
         print("executing ", set_pwd_cmd)
         os.system(set_pwd_cmd)
-        
+
         # setting protocol:
         set_key_cmd = "sudo wpa_cli -i wlan0 set_network " + str(network_id) + " key_mgmt WPA-PSK"
         print("executing ", set_key_cmd)
         os.system(set_key_cmd)
-        
+
         # enabling network:
         enable_network_cmd = "sudo wpa_cli -i wlan0 enable_network " + str(network_id)
         print("executing ", enable_network_cmd)
         os.system(enable_network_cmd)
-      
+
 
 
 def check_connection():
@@ -93,7 +93,7 @@ def check_connection():
         return False
 
 #***********************connect function that take the ssid and the password and check weather it is online/offline
-def connect(input_ssid, input_password):
+def connect_to_wifi(input_ssid, input_password):
     try:
         urllib.request.urlopen('http://216.58.192.142', timeout=1)#checking the conectivity by trying to open a google url
         # print('You are Online')
@@ -107,11 +107,10 @@ def connect(input_ssid, input_password):
         F = Finder(ssid=input_ssid,
                password=input_password,
                interface=interface_name)
-        F.run()       
-        
+        F.run()
 
 
-if __name__ == '__main__':
 
-    connect('ACR5G_5GEXT', 'Ringo@1128')
-    
+# if __name__ == '__main__':
+#
+#     connect('ACR5G_5GEXT', 'Ringo@1128')
