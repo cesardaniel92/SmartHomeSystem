@@ -1,0 +1,90 @@
+{
+  "Items": [
+    {
+      "EntryID": 1568269484705,
+      "Date": "10-22-2019 22:24:44",
+      "Temperature": 120,
+      "AirQuality": 187,
+      "Humidity": 50,
+      "SensorID": 1
+    },
+    {
+      "EntryID": 1568269559115,
+      "Date": "10-22-2019 1:25:59",
+      "Temperature": 27,
+      "AirQuality": 33,
+      "Humidity": 38,
+      "SensorID": 0
+    },
+    {
+      "EntryID": 1568163697358,
+      "Date": "10-12-2019 3:1:37",
+      "Temperature": 27,
+      "AirQuality": 174,
+      "Humidity": 36,
+      "SensorID": 1
+    },
+    {
+      "EntryID": 1568269559569,
+      "Date": "9-29-2019 6:25:59",
+      "Temperature": 0,
+      "AirQuality": 190,
+      "Humidity": 0,
+      "SensorID": 1
+    },
+    {
+      "EntryID": 1567984858099,
+      "Date": "9-23-2019 23:20:58",
+      "Temperature": 26,
+      "AirQuality": 29,
+      "Humidity": 32,
+      "SensorID": 1
+    },
+    {
+      "EntryID": 1568269564318,
+      "Date": "9-13-2019 6:26:4",
+      "Temperature": 27,
+      "AirQuality": 167,
+      "Humidity": 38,
+      "SensorID": 0
+    },
+    {
+      "EntryID": 1568269559140,
+      "Date": "7-14-2019 6:25:59",
+      "Temperature": 0,
+      "AirQuality": 190,
+      "Humidity": 0,
+      "SensorID": 1
+    },
+    {
+      "EntryID": 1568265161418,
+      "Date": "6-16-2019 5:12:41",
+      "Temperature": 26,
+      "AirQuality": 100,
+      "Humidity": 40,
+      "SensorID": 1
+    },
+    {
+      "EntryID": 1569472537061,
+      "Date": "5-25-2019 4:35:37",
+      "Temperature": 5,
+      "AirQuality": 7,
+      "Humidity": 5,
+      "SensorID": 5
+    },
+    {
+      "EntryID": 1566780038135,
+      "Date": "2-23-2019 0:40:38",
+      "Temperature": 26,
+      "AirQuality": 131,
+      "Humidity": 32,
+      "SensorID": 1
+    }
+  ],
+  "Count": 10,
+  "ScannedCount": 10,
+  "LastEvaluatedKey": {
+    "EntryID": 1566780038135,
+    "Date": "8-26-2019 0:40:38"
+  }
+}
