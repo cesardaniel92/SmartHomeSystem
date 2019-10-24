@@ -87,10 +87,25 @@ class API_handler:
     def write_data(self, temp, hum, gas, sensor_id):
         command = self.data_uri + "?sensorID= " + str(sensor_id) + "&humidity=" + str(hum) + "&temperature=" + str(temp) + "&airQuality=" + str(gas)
         requests.put(command)
+        # testCommand: sensorID=1&humidity=400&temperature=300&airQuality=500
 
     def read_data(self):
         command = self.data_uri
-        requests.get(command)
+        return requests.get(command)
+
+    def read_configuration(self):
+        command = self.config_uri
+        response = requests.get(command)
+        return response.text
+
+    def write_configuration(self, user, email, tempT, humT, airQT, notification):
+        command = self.config_uri + "?user=" + str(user) + "&email=" + str(email) + "&tempT=" + str(tempT) + "&humT=" + str(humT) + "&airQT=" + str(airQT) + "&notEnabled=" + str(notification).lower()
+        print(command)
+        requests.put(command)
+        # testCommand: user=test3&email=test@mail.com&tempT=500&humT=500&airQT=500&notEnabled=true
+
+    
+
 
 
 class BLE_handler:
@@ -132,5 +147,3 @@ class BLE_handler:
                     time.sleep(3)   # This delay allows for API calls not to happen too close to eachother.
 
         print ('All devices are connected.')
-
-

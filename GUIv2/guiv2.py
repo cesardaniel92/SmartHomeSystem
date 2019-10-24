@@ -14,8 +14,10 @@ import sys
 import requests
 import threading
 import time
+import json
 
 ble = BLE_handler()
+api = API_handler()
 
 try:
     _fromUtf8 = QtCore.QString.fromUtf8
@@ -79,7 +81,7 @@ class Ui_SmartHomeSystem(object):
         self.ModuleSetup = QtGui.QWidget()
         self.ModuleSetup.setObjectName(_fromUtf8("ModuleSetup"))
         self.gridLayoutWidget_3 = QtGui.QWidget(self.ModuleSetup)
-        self.gridLayoutWidget_3.setGeometry(QtCore.QRect(40, 40, 611, 351))
+        self.gridLayoutWidget_3.setGeometry(QtCore.QRect(40, 40, 620, 351))
         self.gridLayoutWidget_3.setObjectName(_fromUtf8("gridLayoutWidget_3"))
         self.gridLayout_3 = QtGui.QGridLayout(self.gridLayoutWidget_3)
         self.gridLayout_3.setMargin(0)
@@ -157,9 +159,59 @@ class Ui_SmartHomeSystem(object):
         self.gridLayout_2.addWidget(self.sensor2HumValue, 2, 4, 1, 1)
         spacerItem3 = QtGui.QSpacerItem(40, 20, QtGui.QSizePolicy.Expanding, QtGui.QSizePolicy.Minimum)
         self.gridLayout_2.addItem(spacerItem3, 1, 2, 1, 1)
+        self.RefreshButton = QtGui.QPushButton(self.gridLayoutWidget_2)
+        self.RefreshButton.setObjectName(_fromUtf8("RefreshButton"))
+        self.gridLayout_2.addWidget(self.RefreshButton, 4, 0, 1, 5)
         self.tabWidget.addTab(self.LiveSensorData, _fromUtf8(""))
         self.Settings = QtGui.QWidget()
         self.Settings.setObjectName(_fromUtf8("Settings"))
+        self.gridLayoutWidget_4 = QtGui.QWidget(self.Settings)
+        self.gridLayoutWidget_4.setGeometry(QtCore.QRect(60, 20, 581, 391))
+        self.gridLayoutWidget_4.setObjectName(_fromUtf8("gridLayoutWidget_4"))
+        self.gridLayout_4 = QtGui.QGridLayout(self.gridLayoutWidget_4)
+        self.gridLayout_4.setMargin(0)
+        self.gridLayout_4.setObjectName(_fromUtf8("gridLayout_4"))
+        self.SaveButton = QtGui.QPushButton(self.gridLayoutWidget_4)
+        self.SaveButton.setObjectName(_fromUtf8("SaveButton"))
+        self.gridLayout_4.addWidget(self.SaveButton, 8, 0, 1, 2)
+        self.TempLabel = QtGui.QLabel(self.gridLayoutWidget_4)
+        self.TempLabel.setObjectName(_fromUtf8("TempLabel"))
+        self.gridLayout_4.addWidget(self.TempLabel, 2, 0, 1, 1)
+        self.notificationRadioButton = QtGui.QRadioButton(self.gridLayoutWidget_4)
+        self.notificationRadioButton.setObjectName(_fromUtf8("notificationRadioButton"))
+        self.gridLayout_4.addWidget(self.notificationRadioButton, 0, 0, 1, 1)
+        self.EmailLabel = QtGui.QLabel(self.gridLayoutWidget_4)
+        self.EmailLabel.setObjectName(_fromUtf8("EmailLabel"))
+        self.gridLayout_4.addWidget(self.EmailLabel, 6, 0, 1, 1)
+        self.HumLabel = QtGui.QLabel(self.gridLayoutWidget_4)
+        self.HumLabel.setObjectName(_fromUtf8("HumLabel"))
+        self.gridLayout_4.addWidget(self.HumLabel, 3, 0, 1, 1)
+        self.AirQLabel = QtGui.QLabel(self.gridLayoutWidget_4)
+        self.AirQLabel.setObjectName(_fromUtf8("AirQLabel"))
+        self.gridLayout_4.addWidget(self.AirQLabel, 4, 0, 1, 1)
+        spacerItem4 = QtGui.QSpacerItem(20, 40, QtGui.QSizePolicy.Minimum, QtGui.QSizePolicy.Expanding)
+        self.gridLayout_4.addItem(spacerItem4, 7, 0, 1, 1)
+        self.tempInput = QtGui.QLineEdit(self.gridLayoutWidget_4)
+        self.tempInput.setObjectName(_fromUtf8("tempInput"))
+        self.gridLayout_4.addWidget(self.tempInput, 2, 1, 1, 1)
+        self.emailInput = QtGui.QLineEdit(self.gridLayoutWidget_4)
+        self.emailInput.setObjectName(_fromUtf8("emailInput"))
+        self.gridLayout_4.addWidget(self.emailInput, 6, 1, 1, 1)
+        self.HumInput = QtGui.QLineEdit(self.gridLayoutWidget_4)
+        self.HumInput.setObjectName(_fromUtf8("HumInput"))
+        self.gridLayout_4.addWidget(self.HumInput, 3, 1, 1, 1)
+        self.AirQInput = QtGui.QLineEdit(self.gridLayoutWidget_4)
+        self.AirQInput.setObjectName(_fromUtf8("AirQInput"))
+        self.gridLayout_4.addWidget(self.AirQInput, 4, 1, 1, 1)
+        spacerItem5 = QtGui.QSpacerItem(20, 40, QtGui.QSizePolicy.Minimum, QtGui.QSizePolicy.Expanding)
+        self.gridLayout_4.addItem(spacerItem5, 5, 0, 1, 1)
+        self.thresholdLabel = QtGui.QLabel(self.gridLayoutWidget_4)
+        font = QtGui.QFont()
+        font.setBold(False)
+        font.setWeight(50)
+        self.thresholdLabel.setFont(font)
+        self.thresholdLabel.setObjectName(_fromUtf8("thresholdLabel"))
+        self.gridLayout_4.addWidget(self.thresholdLabel, 1, 0, 1, 1)
         self.tabWidget.addTab(self.Settings, _fromUtf8(""))
         self.InternetStatusLabel = QtGui.QLabel(self.centralwidget)
         self.InternetStatusLabel.setGeometry(QtCore.QRect(40, 520, 261, 17))
@@ -169,7 +221,7 @@ class Ui_SmartHomeSystem(object):
         self.sensorModulesConnectedLabel.setObjectName(_fromUtf8("sensorModulesConnectedLabel"))
         SmartHomeSystem.setCentralWidget(self.centralwidget)
         self.menubar = QtGui.QMenuBar(SmartHomeSystem)
-        self.menubar.setGeometry(QtCore.QRect(0, 0, 850, 22))
+        self.menubar.setGeometry(QtCore.QRect(0, 0, 850, 25))
         self.menubar.setObjectName(_fromUtf8("menubar"))
         SmartHomeSystem.setMenuBar(self.menubar)
         self.statusbar = QtGui.QStatusBar(SmartHomeSystem)
@@ -177,17 +229,21 @@ class Ui_SmartHomeSystem(object):
         SmartHomeSystem.setStatusBar(self.statusbar)
 
         self.retranslateUi(SmartHomeSystem)
-        self.tabWidget.setCurrentIndex(0)
+        self.tabWidget.setCurrentIndex(3)
         QtCore.QMetaObject.connectSlotsByName(SmartHomeSystem)
 
-        # ACTIONS CONFIGURATION:
-        self.ScanBLE.clicked.connect(self.scanBLEAction)
-        self.SelectSensorModule.clicked.connect(self.selectSensorMac)
-        self.ConnectToBLEDevices.clicked.connect(self.connectToBLE)
-        self.ScanWiFi.clicked.connect(self.scanWifi)
-        self.ConnectToWiFi.clicked.connect(self.connectToWifiAction)
-        # Setting password mode in text field to use * and hide characters:
-        self.passwordField.setEchoMode(QtGui.QLineEdit.Password)
+
+        # Autopopulating Current Settings:
+        config_response = api.read_configuration()
+        config_json = json.loads(config_response)
+        item = config_json['Items'][0]
+
+        self.tempInput.setText(str(item['TemperatureThreshold']))
+        self.HumInput.setText(str(item['HumidityThreshold']))
+        self.AirQInput.setText(str(item['AirQualityThreshold']))
+        self.emailInput.setText(item['Email'])
+        self.notificationRadioButton.setChecked(item['NotificationsEnabled'])
+
 
     def retranslateUi(self, SmartHomeSystem):
         SmartHomeSystem.setWindowTitle(_translate("SmartHomeSystem", "SmartHomeSystem v1.0", None))
@@ -208,7 +264,15 @@ class Ui_SmartHomeSystem(object):
         self.sensor1Air.setText(_translate("SmartHomeSystem", "AirQuality", None))
         self.sensor2Hum.setText(_translate("SmartHomeSystem", "Humidity", None))
         self.sensor2Air.setText(_translate("SmartHomeSystem", "AirQuality", None))
+        self.RefreshButton.setText(_translate("SmartHomeSystem", "Refresh", None))
         self.tabWidget.setTabText(self.tabWidget.indexOf(self.LiveSensorData), _translate("SmartHomeSystem", "Live Sensor Data", None))
+        self.SaveButton.setText(_translate("SmartHomeSystem", "Save", None))
+        self.TempLabel.setText(_translate("SmartHomeSystem", "Temperature (F)", None))
+        self.notificationRadioButton.setText(_translate("SmartHomeSystem", "Get instant notifications", None))
+        self.EmailLabel.setText(_translate("SmartHomeSystem", "Email:", None))
+        self.HumLabel.setText(_translate("SmartHomeSystem", "Humidity ", None))
+        self.AirQLabel.setText(_translate("SmartHomeSystem", "Air Quality", None))
+        self.thresholdLabel.setText(_translate("SmartHomeSystem", "Threshold Values:", None))
         self.tabWidget.setTabText(self.tabWidget.indexOf(self.Settings), _translate("SmartHomeSystem", "Settings", None))
         self.InternetStatusLabel.setText(_translate("SmartHomeSystem", "Internet Connection Status:", None))
         self.sensorModulesConnectedLabel.setText(_translate("SmartHomeSystem", "Sensor Modules Connected: ", None))
@@ -259,8 +323,8 @@ class Ui_SmartHomeSystem(object):
         if check_connection():
             newText = "Internet Connection Status: ONLINE"
         else:
-            tempText = "Internet Connection Status: ... "
-            self.InternetStatusLabel.setText(tempText)
+            # tempText = "Internet Connection Status: ... "
+            # self.InternetStatusLabel.setText(tempText)
 
             connect_to_wifi(ssid, password)
             time.sleep(15) # Waiting for connection to estabilize
@@ -271,6 +335,7 @@ class Ui_SmartHomeSystem(object):
                 newText = "Internet Connection Status: OFFLINE"
 
         self.InternetStatusLabel.setText(newText)
+
 
     def exitGUI(self):
         sys.exit()

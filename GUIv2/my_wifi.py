@@ -74,7 +74,7 @@ def connect_to_wifi(input_ssid, input_password):
 
 def scan_wifi():
     '''
-    Search function all returns a list of strings corresponding to available SSIDs.
+    This function returns a list of strings corresponding to available SSIDs.
     '''
     wifilist = []
     cells = wifi.Cell.all('wlan0') #will list all the networks are nearby
