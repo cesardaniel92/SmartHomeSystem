@@ -36,6 +36,7 @@ except AttributeError:
 class Ui_SmartHomeSystem(object):
     def setupUi(self, SmartHomeSystem):
         SmartHomeSystem.setObjectName(_fromUtf8("SmartHomeSystem"))
+        SmartHomeSystem.setObjectName(_fromUtf8("SmartHomeSystem"))
         SmartHomeSystem.resize(850, 638)
         sizePolicy = QtGui.QSizePolicy(QtGui.QSizePolicy.Fixed, QtGui.QSizePolicy.Fixed)
         sizePolicy.setHorizontalStretch(0)
@@ -177,9 +178,6 @@ class Ui_SmartHomeSystem(object):
         self.TempLabel = QtGui.QLabel(self.gridLayoutWidget_4)
         self.TempLabel.setObjectName(_fromUtf8("TempLabel"))
         self.gridLayout_4.addWidget(self.TempLabel, 2, 0, 1, 1)
-        self.notificationRadioButton = QtGui.QRadioButton(self.gridLayoutWidget_4)
-        self.notificationRadioButton.setObjectName(_fromUtf8("notificationRadioButton"))
-        self.gridLayout_4.addWidget(self.notificationRadioButton, 0, 0, 1, 1)
         self.EmailLabel = QtGui.QLabel(self.gridLayoutWidget_4)
         self.EmailLabel.setObjectName(_fromUtf8("EmailLabel"))
         self.gridLayout_4.addWidget(self.EmailLabel, 6, 0, 1, 1)
@@ -212,6 +210,9 @@ class Ui_SmartHomeSystem(object):
         self.thresholdLabel.setFont(font)
         self.thresholdLabel.setObjectName(_fromUtf8("thresholdLabel"))
         self.gridLayout_4.addWidget(self.thresholdLabel, 1, 0, 1, 1)
+        self.notificationRadioButton = QtGui.QRadioButton(self.gridLayoutWidget_4)
+        self.notificationRadioButton.setObjectName(_fromUtf8("notificationRadioButton"))
+        self.gridLayout_4.addWidget(self.notificationRadioButton, 0, 0, 1, 2)
         self.tabWidget.addTab(self.Settings, _fromUtf8(""))
         self.InternetStatusLabel = QtGui.QLabel(self.centralwidget)
         self.InternetStatusLabel.setGeometry(QtCore.QRect(40, 520, 261, 17))
@@ -243,6 +244,16 @@ class Ui_SmartHomeSystem(object):
         self.AirQInput.setText(str(item['AirQualityThreshold']))
         self.emailInput.setText(item['Email'])
         self.notificationRadioButton.setChecked(item['NotificationsEnabled'])
+
+        # ACTIONS CONFIGURATION:
+        self.ScanBLE.clicked.connect(self.scanBLEAction)
+        self.SelectSensorModule.clicked.connect(self.selectSensorMac)
+        self.ConnectToBLEDevices.clicked.connect(self.connectToBLE)
+        self.ScanWiFi.clicked.connect(self.scanWifi)
+        self.ConnectToWiFi.clicked.connect(self.connectToWifiAction)
+        # Setting password mode in text field to use * and hide characters:
+        self.passwordField.setEchoMode(QtGui.QLineEdit.Password)
+        self.SaveButton.clicked.connect(self.saveConfiguration)
 
 
     def retranslateUi(self, SmartHomeSystem):
@@ -336,6 +347,15 @@ class Ui_SmartHomeSystem(object):
 
         self.InternetStatusLabel.setText(newText)
 
+
+    def saveConfiguration(self):
+        notifications = self.notificationRadioButton.isChecked()
+        tempT = self.tempInput.text()
+        humT = self.HumInput.text()
+        airQT = self.AirQInput.text()
+        newEmail = self.emailInput.text()
+
+        api.write_configuration('Default', newEmail, tempT, humT, airQT, notifications)
 
     def exitGUI(self):
         sys.exit()
