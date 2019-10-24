@@ -91,7 +91,8 @@ class API_handler:
 
     def read_data(self):
         command = self.data_uri
-        return requests.get(command)
+        response = requests.get(command)
+        return response.text
 
     def read_configuration(self):
         command = self.config_uri
@@ -104,7 +105,7 @@ class API_handler:
         requests.put(command)
         # testCommand: user=test3&email=test@mail.com&tempT=500&humT=500&airQT=500&notEnabled=true
 
-    
+
 
 
 

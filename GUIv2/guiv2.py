@@ -254,6 +254,7 @@ class Ui_SmartHomeSystem(object):
         # Setting password mode in text field to use * and hide characters:
         self.passwordField.setEchoMode(QtGui.QLineEdit.Password)
         self.SaveButton.clicked.connect(self.saveConfiguration)
+        self.RefreshButton.clicked.connect(self.getLiveData)
 
 
     def retranslateUi(self, SmartHomeSystem):
@@ -356,6 +357,24 @@ class Ui_SmartHomeSystem(object):
         newEmail = self.emailInput.text()
 
         api.write_configuration('Default', newEmail, tempT, humT, airQT, notifications)
+
+
+    def getLiveData(self):
+        data_response = api.read_data()
+        data_json = json.loads(data_response)
+        sensor1 = data_json['Items'][0]
+        sensor2 = data_json['Items'][1]
+
+        print(sensor1)
+        print(sensor2)
+
+        self.sensor1TempValue.display(sensor1['Temperature'])
+        self.sensor1HumValue.display(sensor1['Humidity'])
+        self.sensor1AirValue.display(sensor1['AirQuality'])
+
+        self.sensor2TempValue.display(sensor2['Temperature'])
+        self.sensor2HumValue.display(sensor2['Humidity'])
+        self.sensor2AirValue.display(sensor2['AirQuality'])
 
     def exitGUI(self):
         sys.exit()
