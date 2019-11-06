@@ -6,6 +6,38 @@ import time
 import binascii
 
 
+class API_handler:
+    '''
+    This class contains the functions that communicate to the RestAPI for both
+    sensor data and configuration.
+    '''
+    api_endpoint = 'https://l4gv9uqwpd.execute-api.us-west-1.amazonaws.com/prod/'
+    data_uri = api_endpoint + 'sensordata'
+    config_uri = api_endpoint + 'configuration'
+
+    def write_data(self, temp, hum, gas, sensor_id, label):
+        command = self.data_uri + "?sensorID=" + str(sensor_id) + "&humidity=" + str(hum) + "&temperature=" + str(temp) + "&airQuality=" + str(gas) + "&label=" + str(label)
+        print("Sending command: " + command)
+        requests.put(command)
+        # testCommand: sensorID=1&humidity=400&temperature=300&airQuality=500&label=testLabel
+
+    def read_data(self):
+        command = self.data_uri
+        response = requests.get(command)
+        return response.text
+
+    def read_configuration(self):
+        command = self.config_uri
+        response = requests.get(command)
+        return response.text
+
+    def write_configuration(self, user, email, tempT, humT, airQT, notification):
+        command = self.config_uri + "?user=" + str(user) + "&email=" + str(email) + "&tempT=" + str(tempT) + "&humT=" + str(humT) + "&airQT=" + str(airQT) + "&notEnabled=" + str(notification).lower()
+        print(command)
+        requests.put(command)
+        # testCommand: user=test3&email=test@mail.com&tempT=500&humT=500&airQT=500&notEnabled=true
+
+
 class NotificationDelegate(DefaultDelegate):
     '''
     This class handles the notifications received from the BLE devices.
@@ -16,9 +48,9 @@ class NotificationDelegate(DefaultDelegate):
 
     '''
     # Class constructor:
-    def __init__(self, connection_number, api, label):
+    def __init__(self, module_ID, api, label):
         DefaultDelegate.__init__(self)
-        self.connection_number = connection_number
+        self.module_ID = module_ID
         self.api = api
         self.label = label
 
@@ -43,8 +75,8 @@ class NotificationDelegate(DefaultDelegate):
             # print'Thread/SensorID: ' + str(self.connection_number) + ' \tTemperature: ' + str(temp) + ' \tHumidity: ' + str(hum) + ' \tAirQuality: ' + str(airQ))
 
             # writing to API:
-            print ("Thread/SensorID:",  str(self.connection_number), " writing data into API ...")
-            sensor_id = self.connection_number
+            print ("Thread/SensorID ",  str(self.module_ID), " with label ", self.label, " writing data into API ...")
+            sensor_id = self.module_ID
             self.api.write_data(temp, hum, airQ, sensor_id, self.label)
 
 
@@ -54,18 +86,19 @@ class ConnectionHandlerThread (threading.Thread):
         WHEN THIS CLASS IS NOT IN MAIN, IT FAILS! -> TEMPORALphe
     '''
     # Constructor
-    def __init__(self, connection_index, connected_modules, api):
+    def __init__(self, connection_index, connected_modules, api, label):
         threading.Thread.__init__(self)
         self.connection_index = connection_index
         self.connected_modules = connected_modules
         self.api = api
+        self.label = label
         # self._stop = threading.Event()
 
     # Start method:
     def run(self):
         # initializing connection object and setting notification delegate:
         connection = self.connected_modules[self.connection_index]
-        connection.setDelegate(NotificationDelegate(self.connection_index, self.api))
+        connection.setDelegate(NotificationDelegate(self.connection_index, self.api, self.label))
 
         # waiting for sensors to stabilize
         time.sleep(5)
@@ -76,35 +109,6 @@ class ConnectionHandlerThread (threading.Thread):
                 print ("ERROR: no message received from Sensor")
 
 
-class API_handler:
-    '''
-    This class contains the functions that communicate to the RestAPI for both
-    sensor data and configuration.
-    '''
-    api_endpoint = 'https://l4gv9uqwpd.execute-api.us-west-1.amazonaws.com/prod/'
-    data_uri = api_endpoint + 'sensordata'
-    config_uri = api_endpoint + 'configuration'
-
-    def write_data(self, temp, hum, gas, sensor_id, label):
-        command = self.data_uri + "?sensorID= " + str(sensor_id) + "&humidity=" + str(hum) + "&temperature=" + str(temp) + "&airQuality=" + str(gas) + "&label=" + label
-        requests.put(command)
-        # testCommand: sensorID=1&humidity=400&temperature=300&airQuality=500
-
-    def read_data(self):
-        command = self.data_uri
-        response = requests.get(command)
-        return response.text
-
-    def read_configuration(self):
-        command = self.config_uri
-        response = requests.get(command)
-        return response.text
-
-    def write_configuration(self, user, email, tempT, humT, airQT, notification):
-        command = self.config_uri + "?user=" + str(user) + "&email=" + str(email) + "&tempT=" + str(tempT) + "&humT=" + str(humT) + "&airQT=" + str(airQT) + "&notEnabled=" + str(notification).lower()
-        print(command)
-        requests.put(command)
-        # testCommand: user=test3&email=test@mail.com&tempT=500&humT=500&airQT=500&notEnabled=true
 
 
 class BLE_handler:
@@ -143,7 +147,10 @@ class BLE_handler:
                     p = Peripheral(d)
                     self.connected_modules.append(p)
                     print ('Module ', d.addr , ' connected. Assigned ID = ', str(len(self.connected_modules)-1))
-                    t = ConnectionHandlerThread(len(self.connected_modules)-1, self.connected_modules, self.api)
+
+                    module_index = len(self.connected_modules)-1
+                    module_label = self.modules_labels[module_index]
+                    t = ConnectionHandlerThread(module_index, self.connected_modules, self.api, module_label)
                     t.start()
                     self.connection_threads.append(t)
                     time.sleep(3)   # This delay allows for API calls not to happen too close to eachother.

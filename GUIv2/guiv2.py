@@ -344,7 +344,7 @@ class Ui_SmartHomeSystem(object):
 
     def getLabel(self):
         global ble
-        
+
         itemIndex = int(self.ModulesSelectedList.currentRow())
         itemLabel = ble.modules_labels[itemIndex]
         self.labelValue.setText(itemLabel)
@@ -372,7 +372,6 @@ class Ui_SmartHomeSystem(object):
         # msg.buttonClicked.connect(msgbtn)
 
         retval = msg.exec_()
-        # print "value of pressed message box button:", retval
 
     def scanWifi(self):
         if check_connection():
