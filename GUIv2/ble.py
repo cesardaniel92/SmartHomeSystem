@@ -16,10 +16,11 @@ class NotificationDelegate(DefaultDelegate):
 
     '''
     # Class constructor:
-    def __init__(self, connection_number, api):
+    def __init__(self, connection_number, api, label):
         DefaultDelegate.__init__(self)
         self.connection_number = connection_number
         self.api = api
+        self.label = label
 
     # Notification handler:
     def handleNotification(self, cHandle, data):
@@ -44,13 +45,13 @@ class NotificationDelegate(DefaultDelegate):
             # writing to API:
             print ("Thread/SensorID:",  str(self.connection_number), " writing data into API ...")
             sensor_id = self.connection_number
-            self.api.write_data(temp, hum, airQ, sensor_id)
+            self.api.write_data(temp, hum, airQ, sensor_id, self.label)
 
 
 class ConnectionHandlerThread (threading.Thread):
     '''
         This class represents the threads that handle the connection to BLE devices.
-        WHEN THIS CLASS IS NOT IN MAIN, IT FAILS! -> TEMPORAL
+        WHEN THIS CLASS IS NOT IN MAIN, IT FAILS! -> TEMPORALphe
     '''
     # Constructor
     def __init__(self, connection_index, connected_modules, api):
@@ -84,8 +85,8 @@ class API_handler:
     data_uri = api_endpoint + 'sensordata'
     config_uri = api_endpoint + 'configuration'
 
-    def write_data(self, temp, hum, gas, sensor_id):
-        command = self.data_uri + "?sensorID= " + str(sensor_id) + "&humidity=" + str(hum) + "&temperature=" + str(temp) + "&airQuality=" + str(gas)
+    def write_data(self, temp, hum, gas, sensor_id, label):
+        command = self.data_uri + "?sensorID= " + str(sensor_id) + "&humidity=" + str(hum) + "&temperature=" + str(temp) + "&airQuality=" + str(gas) + "&label=" + label
         requests.put(command)
         # testCommand: sensorID=1&humidity=400&temperature=300&airQuality=500
 
@@ -106,9 +107,6 @@ class API_handler:
         # testCommand: user=test3&email=test@mail.com&tempT=500&humT=500&airQT=500&notEnabled=true
 
 
-
-
-
 class BLE_handler:
     '''
     This class handles the communication with the sensor modules through BLE protocol.
@@ -118,11 +116,12 @@ class BLE_handler:
     def __init__(self):
         # modules_MACs = ['18:93:d7:14:5e:2b', 'c8:fd:19:3e:be:7f']
         self.modules_MACs = []
+        self.modules_labels = [] # "default0", "default1"
         self.connected_modules = []
         self.connection_threads = []
         self.scanner = Scanner(0)
         self.api = API_handler()
-        self.apiWrite = False
+        # self.apiWrite = False
         self.bleDevices = []
 
     def addModuleMAC(self, new_MAC):
@@ -130,14 +129,16 @@ class BLE_handler:
 
     def scan(self):
         self.bleDevices = self.scanner.scan(2)
+
         # for d in self.bleDevices:
         #     print(d.addr)
 
     def connect(self):
+
         while len(self.connection_threads) < len(self.modules_MACs):
-            print ('Scanning ...')
-            devices = self.scanner.scan(2)
-            for d in devices:
+            # print ('Scanning ...')
+            # devices = self.scanner.scan(2)
+            for d in self.bleDevices:
                 if d.addr in self.modules_MACs:
                     p = Peripheral(d)
                     self.connected_modules.append(p)
