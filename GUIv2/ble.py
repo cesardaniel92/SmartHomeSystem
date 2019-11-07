@@ -17,7 +17,6 @@ class API_handler:
 
     def write_data(self, temp, hum, gas, sensor_id, label):
         command = self.data_uri + "?sensorID=" + str(sensor_id) + "&humidity=" + str(hum) + "&temperature=" + str(temp) + "&airQuality=" + str(gas) + "&label=" + str(label)
-        print("Sending command: " + command)
         requests.put(command)
         # testCommand: sensorID=1&humidity=400&temperature=300&airQuality=500&label=testLabel
 
@@ -33,7 +32,7 @@ class API_handler:
 
     def write_configuration(self, user, email, tempT, humT, airQT, notification):
         command = self.config_uri + "?user=" + str(user) + "&email=" + str(email) + "&tempT=" + str(tempT) + "&humT=" + str(humT) + "&airQT=" + str(airQT) + "&notEnabled=" + str(notification).lower()
-        print(command)
+        # print(command)
         requests.put(command)
         # testCommand: user=test3&email=test@mail.com&tempT=500&humT=500&airQT=500&notEnabled=true
 
@@ -71,11 +70,8 @@ class NotificationDelegate(DefaultDelegate):
             airQ = val[4:6]
             airQ = int(airQ, 16)
 
-            # outputting data for troubleshooting purposes:
-            # print'Thread/SensorID: ' + str(self.connection_number) + ' \tTemperature: ' + str(temp) + ' \tHumidity: ' + str(hum) + ' \tAirQuality: ' + str(airQ))
-
             # writing to API:
-            print ("Thread/SensorID ",  str(self.module_ID), " with label ", self.label, " writing data into API ...")
+            # print ("Thread/SensorID ",  str(self.module_ID), " with label ", self.label, " writing data into API ...")
             sensor_id = self.module_ID
             self.api.write_data(temp, hum, airQ, sensor_id, self.label)
 
@@ -92,7 +88,6 @@ class ConnectionHandlerThread (threading.Thread):
         self.connected_modules = connected_modules
         self.api = api
         self.label = label
-        # self._stop = threading.Event()
 
     # Start method:
     def run(self):
@@ -118,14 +113,12 @@ class BLE_handler:
     '''
     # Constructor initializing all properties:
     def __init__(self):
-        # modules_MACs = ['18:93:d7:14:5e:2b', 'c8:fd:19:3e:be:7f']
-        self.modules_MACs = []
+        self.modules_MACs = []  # ['18:93:d7:14:5e:2b', 'c8:fd:19:3e:be:7f']
         self.modules_labels = [] # "default0", "default1"
         self.connected_modules = []
         self.connection_threads = []
         self.scanner = Scanner(0)
         self.api = API_handler()
-        # self.apiWrite = False
         self.bleDevices = []
 
     def addModuleMAC(self, new_MAC):
@@ -134,14 +127,9 @@ class BLE_handler:
     def scan(self):
         self.bleDevices = self.scanner.scan(2)
 
-        # for d in self.bleDevices:
-        #     print(d.addr)
-
     def connect(self):
 
         while len(self.connection_threads) < len(self.modules_MACs):
-            # print ('Scanning ...')
-            # devices = self.scanner.scan(2)
             for d in self.bleDevices:
                 if d.addr in self.modules_MACs:
                     p = Peripheral(d)

@@ -249,7 +249,6 @@ class Ui_SmartHomeSystem(object):
         config_response = api.read_configuration()
         config_json = json.loads(config_response)
         item = config_json['Items'][0]
-
         self.tempInput.setText(str(item['TemperatureThreshold']))
         self.HumInput.setText(str(item['HumidityThreshold']))
         self.AirQInput.setText(str(item['AirQualityThreshold']))
@@ -262,12 +261,13 @@ class Ui_SmartHomeSystem(object):
         self.ConnectToBLEDevices.clicked.connect(self.connectToBLE)
         self.ScanWiFi.clicked.connect(self.scanWifi)
         self.ConnectToWiFi.clicked.connect(self.connectToWifiAction)
-        # Setting password mode in text field to use * and hide characters:
-        self.passwordField.setEchoMode(QtGui.QLineEdit.Password)
         self.SaveButton.clicked.connect(self.saveConfiguration)
         self.RefreshButton.clicked.connect(self.getLiveData)
         self.ModulesSelectedList.itemClicked.connect(self.getLabel)
         self.setLabelButton.clicked.connect(self.setLabel)
+
+        # Setting password mode in text field to use * and hide characters:
+        self.passwordField.setEchoMode(QtGui.QLineEdit.Password)
 
 
     def retranslateUi(self, SmartHomeSystem):
@@ -324,23 +324,16 @@ class Ui_SmartHomeSystem(object):
         newIndex = len(ble.modules_MACs) - 1
         newLabel = "default" + str(newIndex)
         ble.modules_labels.append(newLabel)
-        # print(self.BLEList.currentItem().text())
 
     def connectToBLE(self):
         global ble
 
-        # items = []
-        # for index in range(self.ModulesSelectedList.count()):
-        #      items.append(self.ModulesSelectedList.item(index).text())
-        #
-        # for mac in items:
-        #     print("Adding " + mac)
-        #     ble.addModuleMAC(mac)
-
-        ble.connect()
-        # if ble.connect():
-        newText = "Sensor Modules Connected: " + str(len(ble.connected_modules))
-        self.sensorModulesConnectedLabel.setText(newText)
+        connected = ble.connect()
+        if connected:
+            newText = "Sensor Modules Connected: " + str(len(ble.connected_modules))
+            self.sensorModulesConnectedLabel.setText(newText)
+        else:
+            self.showdialog('Critical', "Connection attempt failed.")
 
     def getLabel(self):
         global ble
@@ -365,12 +358,8 @@ class Ui_SmartHomeSystem(object):
             msg.setIcon(QMessageBox.Information)
 
         msg.setText(messageText)
-        # msg.setInformativeText("This is additional information")
         msg.setWindowTitle(title)
-        # msg.setDetailedText("The details are as follows:")
         msg.setStandardButtons(QMessageBox.Ok)
-        # msg.buttonClicked.connect(msgbtn)
-
         retval = msg.exec_()
 
     def scanWifi(self):
@@ -391,8 +380,6 @@ class Ui_SmartHomeSystem(object):
         if check_connection():
             newText = "Internet Connection Status: ONLINE"
         else:
-            # tempText = "Internet Connection Status: ... "
-            # self.InternetStatusLabel.setText(tempText)
             connect_to_wifi(ssid, password)
             time.sleep(15) # Waiting for connection to estabilize
             if check_connection():
@@ -425,13 +412,14 @@ class Ui_SmartHomeSystem(object):
             sensor1 = data_json['Items'][0]
             sensor2 = data_json['Items'][1]
 
-            # print(sensor1)
-            # print(sensor2)
-
+            print(sensor1)
+            print(sensor2)
+            self.sensor1Label.setText(sensor1['Label'])
             self.sensor1TempValue.display(sensor1['Temperature'])
             self.sensor1HumValue.display(sensor1['Humidity'])
             self.sensor1AirValue.display(sensor1['AirQuality'])
 
+            self.sensor2Label.setText(sensor2['Label'])
             self.sensor2TempValue.display(sensor2['Temperature'])
             self.sensor2HumValue.display(sensor2['Humidity'])
             self.sensor2AirValue.display(sensor2['AirQuality'])
