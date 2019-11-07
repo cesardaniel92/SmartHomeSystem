@@ -51,6 +51,9 @@ exports.handle = function(e, ctx, cb) {
             var time = today.getHours() + ":" + today.getMinutes() + ":" + today.getSeconds();
             var today = date + ' ' + time;
 
+            var sensorsDetails = ``;
+            var alert = false;
+
             //
             var sensorsParams = {
                 Item: {
@@ -59,7 +62,8 @@ exports.handle = function(e, ctx, cb) {
                     SensorID: e.sensorID,
                     Humidity: e.humidity,
                     Temperature: e.temperature,
-                    AirQuality: e.airQuality
+                    AirQuality: e.airQuality,
+                    Label: e.label
                 },
 
                 TableName: 'SHS-SensorData'
@@ -71,42 +75,72 @@ exports.handle = function(e, ctx, cb) {
             if (configuration.Item.NotificationsEnabled == true){
                 console.log('Notifications Enabled.\n');
 
-                var sensorsDetails = ``
-
                 // Temperature:
                 if (e.temperature < configuration.Item.TemperatureThreshold){
-                    // console.log('Temperature Level OK.\n');
+                    console.log('Temperature Level OK.\n');
                 }else{
-                    // console.log('Temperature Level ALERT!!!\n');
+                    console.log('Temperature Level ALERT!!!\n');
+                    alert = true;
                     sensorsDetails += `Temperature: ${e.temperature}\n`;
                 }
 
                 // Humidity:
                 if (e.humidity < configuration.Item.HumidityThreshold){
-                    // console.log('Humidity Level OK.\n');
+                    console.log('Humidity Level OK.\n');
                 }else{
-                    // console.log(`Humidity Level ALERT!!! ${e.humidity} \n`);
+                    console.log(`Humidity Level ALERT!!! ${e.humidity} \n`);
+                    alert = true;
                     sensorsDetails += `Humidity: ${e.humidity}\n`;
                 }
 
                 // AirQ:
-                if (e.airQuality < configuration.Item.AirQThreshold){
-                    // console.log('AirQ Level OK.\n');
+                if (e.airQuality > configuration.Item.AirQualityThreshold){
+                    console.log('AirQ Level OK.\n');
                 }else{
-                    // console.log('AirQ Level ALERT!!!\n');
+                    console.log('AirQ Level ALERT!!!\n');
+                    alert = true;
                     sensorsDetails += `AirQuality: ${e.airQuality}\n`;
                 }
 
-                // Building Notification Body with sensor details
-                var notificationBody = `SHS-ALERT:\nOne or more of your sensor values is greater than the configured threshold (See details below).\nDate: ${today}\n${sensorsDetails} `;
+                if (alert){
+                    // Building Notification Body with sensor details
+                    var notificationBody = `SHS-ALERT:\nOne or more of your sensor values is greater than the configured threshold (See details below).\nDate: ${today}\n${sensorsDetails} `;
 
-                //////// Sending SNS Notification \\\\\\\\\\\\\\\\\\\\\\\
-                var message_params = {
-                    Message: notificationBody, /* required */
-                    TopicArn: 'arn:aws:sns:us-west-1:136159130349:dynamodb'
-                };
-                // Create promise and SNS service object
-                var publishTextPromise = new AWS.SNS({apiVersion: '2010-03-31'}).publish(message_params).promise();
+                    //////// Sending SNS Notification \\\\\\\\\\\\\\\\\\\\\\\
+                    var message_params = {
+                        Message: notificationBody, /* required */
+                        TopicArn: 'arn:aws:sns:us-west-1:136159130349:SHS-Alerts'
+                    };
+                    // Create promise and SNS service object
+                    var publishTextPromise = new AWS.SNS({apiVersion: '2010-03-31'}).publish(message_params).promise();
+                    console.log(`sending ALERT!!!`);
+
+                    // Disabling notifications to avoid consecutive alerts:
+                    var writeConfigParams = {
+                        Item: {
+                            User: configuration.Item.User,
+                            Email: configuration.Item.Email,
+                            TemperatureThreshold: configuration.Item.TemperatureThreshold,
+                            HumidityThreshold: configuration.Item.HumidityThreshold,
+                            AirQualityThreshold: configuration.Item.AirQualityThreshold,
+                            NotificationsEnabled: false
+                        },
+
+                        TableName: 'SHS-Configuration'
+                    };
+
+                    docClient.put(writeConfigParams, function(err, data){
+                        if(err){
+                            cb(err, null);
+                        }else{
+                            cb(null, data);
+                            console.log('Notications disabled.');
+                        }
+                    });
+
+
+                }
+
 
             }
 
@@ -119,6 +153,10 @@ exports.handle = function(e, ctx, cb) {
                     console.log('Data written to DB.');
                 }
             });
+
+
+
+
 
         }
     });

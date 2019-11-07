@@ -16,7 +16,6 @@
     4. Subscribe input email if not found.
     5. Write configuration to DynamoDB table.
 
-...
 */
 
 console.log('starting writeConfiguration function')
