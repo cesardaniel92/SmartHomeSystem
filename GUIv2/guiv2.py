@@ -249,6 +249,7 @@ class Ui_SmartHomeSystem(object):
         config_response = api.read_configuration()
         config_json = json.loads(config_response)
         item = config_json['Items'][0]
+
         self.tempInput.setText(str(item['TemperatureThreshold']))
         self.HumInput.setText(str(item['HumidityThreshold']))
         self.AirQInput.setText(str(item['AirQualityThreshold']))
@@ -328,12 +329,9 @@ class Ui_SmartHomeSystem(object):
     def connectToBLE(self):
         global ble
 
-        connected = ble.connect()
-        if connected:
-            newText = "Sensor Modules Connected: " + str(len(ble.connected_modules))
-            self.sensorModulesConnectedLabel.setText(newText)
-        else:
-            self.showdialog('Critical', "Connection attempt failed.")
+        ble.connect()
+        newText = "Sensor Modules Connected: " + str(len(ble.connected_modules))
+        self.sensorModulesConnectedLabel.setText(newText)
 
     def getLabel(self):
         global ble
